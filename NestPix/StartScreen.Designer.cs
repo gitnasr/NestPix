@@ -32,13 +32,11 @@
             PathTextBox = new TextBox();
             panel1 = new Panel();
             start = new Button();
-            StatusBar = new StatusStrip();
-            StatusBarLabel = new ToolStripStatusLabel();
             menuStrip1 = new MenuStrip();
             toolStripMenuItem1 = new ToolStripMenuItem();
             editKeybindgToolStripMenuItem = new ToolStripMenuItem();
+            StatusLabel = new LinkLabel();
             panel1.SuspendLayout();
-            StatusBar.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -83,23 +81,6 @@
             start.UseVisualStyleBackColor = true;
             start.Click += start_Click;
             // 
-            // StatusBar
-            // 
-            StatusBar.ImageScalingSize = new Size(24, 24);
-            StatusBar.Items.AddRange(new ToolStripItem[] { StatusBarLabel });
-            StatusBar.Location = new Point(0, 106);
-            StatusBar.Name = "StatusBar";
-            StatusBar.RenderMode = ToolStripRenderMode.Professional;
-            StatusBar.Size = new Size(794, 32);
-            StatusBar.TabIndex = 4;
-            StatusBar.Text = "statusStrip1";
-            // 
-            // StatusBarLabel
-            // 
-            StatusBarLabel.Name = "StatusBarLabel";
-            StatusBarLabel.Size = new Size(179, 25);
-            StatusBarLabel.Text = "toolStripStatusLabel1";
-            // 
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(24, 24);
@@ -122,14 +103,24 @@
             editKeybindgToolStripMenuItem.Size = new Size(138, 29);
             editKeybindgToolStripMenuItem.Text = "Edit Keybindg";
             // 
+            // StatusLabel
+            // 
+            StatusLabel.AutoSize = true;
+            StatusLabel.Location = new Point(3, 96);
+            StatusLabel.Name = "StatusLabel";
+            StatusLabel.Size = new Size(169, 25);
+            StatusLabel.TabIndex = 6;
+            StatusLabel.TabStop = true;
+            StatusLabel.Text = "Paste Link to Start ...";
+            // 
             // StartScreen
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(794, 138);
+            ClientSize = new Size(794, 128);
+            Controls.Add(StatusLabel);
             Controls.Add(menuStrip1);
-            Controls.Add(StatusBar);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -141,8 +132,6 @@
             Load += StartScreen_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            StatusBar.ResumeLayout(false);
-            StatusBar.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -159,5 +148,6 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem editKeybindgToolStripMenuItem;
+        private LinkLabel StatusLabel;
     }
 }

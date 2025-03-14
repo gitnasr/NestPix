@@ -4,27 +4,38 @@ namespace NestPix
 {
     public partial class StartScreen : Form
     {
+        Action<string> UpdateUI;
 
         public StartScreen()
         {
 
             InitializeComponent();
-            StatusBarLabel.Text = "Waiting For start...";
+            UpdateUI = (string status) =>
+            {
+                this.Invoke(() =>
+                {
+                    StatusLabel.Text = status;
+                });
+            };
         }
 
-        private void start_Click(object sender, EventArgs e)
+        private async void start_Click(object sender, EventArgs e)
         {
+            PathTextBox.Enabled = false;
             // Get Directories and Sub Directories
-            string Path = PathTextBox.Text;
-            FilesService FilesService = new FilesService(Path);
+            string FolderPath = PathTextBox.Text;
 
-            FilesService.GetAllImages();
-
-            //ScanService Scanner = new ScanService(Path);
+            FilesService FilesService = new FilesService(FolderPath);
 
 
-            //Scanner.GetAllDirectories();
-            //Scanner.Dirs.ForEach(dir => MessageBox.Show(dir));
+            var result = await FilesService.GetAllImages(UpdateUI);
+
+            PathTextBox.Enabled = true;
+
+            MessageBox.Show(result.Count.ToString());
+
+
+
         }
 
         private void PathTextBox_TextChanged(object sender, EventArgs e)
