@@ -1,4 +1,5 @@
 using NestPix.Services;
+using System.Text.Json;
 
 namespace NestPix
 {
@@ -32,8 +33,10 @@ namespace NestPix
 
             PathTextBox.Enabled = true;
 
-            MessageBox.Show(result.Count.ToString());
+            string json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
 
+            string filePath = "data.json";
+            File.WriteAllText(filePath, json);
 
 
         }
