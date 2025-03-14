@@ -33,7 +33,13 @@
             panel1 = new Panel();
             start = new Button();
             StatusBar = new StatusStrip();
+            StatusBarLabel = new ToolStripStatusLabel();
+            menuStrip1 = new MenuStrip();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            editKeybindgToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
+            StatusBar.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -61,10 +67,9 @@
             panel1.Controls.Add(start);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(PathTextBox);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
+            panel1.Location = new Point(0, 42);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 51);
+            panel1.Size = new Size(794, 51);
             panel1.TabIndex = 3;
             // 
             // start
@@ -81,18 +86,49 @@
             // StatusBar
             // 
             StatusBar.ImageScalingSize = new Size(24, 24);
-            StatusBar.Location = new Point(0, 86);
+            StatusBar.Items.AddRange(new ToolStripItem[] { StatusBarLabel });
+            StatusBar.Location = new Point(0, 106);
             StatusBar.Name = "StatusBar";
-            StatusBar.Size = new Size(800, 22);
+            StatusBar.RenderMode = ToolStripRenderMode.Professional;
+            StatusBar.Size = new Size(794, 32);
             StatusBar.TabIndex = 4;
             StatusBar.Text = "statusStrip1";
+            // 
+            // StatusBarLabel
+            // 
+            StatusBarLabel.Name = "StatusBarLabel";
+            StatusBarLabel.Size = new Size(179, 25);
+            StatusBarLabel.Text = "toolStripStatusLabel1";
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(24, 24);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, editKeybindgToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(794, 33);
+            menuStrip1.TabIndex = 5;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(55, 29);
+            toolStripMenuItem1.Text = "&Exit";
+            // 
+            // editKeybindgToolStripMenuItem
+            // 
+            editKeybindgToolStripMenuItem.Name = "editKeybindgToolStripMenuItem";
+            editKeybindgToolStripMenuItem.Size = new Size(138, 29);
+            editKeybindgToolStripMenuItem.Text = "Edit Keybindg";
             // 
             // StartScreen
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(800, 108);
+            ClientSize = new Size(794, 138);
+            Controls.Add(menuStrip1);
             Controls.Add(StatusBar);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -102,8 +138,13 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "NestPix";
             TopMost = true;
+            Load += StartScreen_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            StatusBar.ResumeLayout(false);
+            StatusBar.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -114,5 +155,9 @@
         private Panel panel1;
         private Button start;
         private StatusStrip StatusBar;
+        private ToolStripStatusLabel StatusBarLabel;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem editKeybindgToolStripMenuItem;
     }
 }
