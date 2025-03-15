@@ -39,13 +39,14 @@
             MainImage.Size = new Size(1166, 1142);
             MainImage.TabIndex = 0;
             MainImage.TabStop = false;
+            MainImage.Click += MainImage_Click;
             // 
             // ViewerScreen
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(1178, 1312);
+            ClientSize = new Size(1183, 1312);
             Controls.Add(MainImage);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;

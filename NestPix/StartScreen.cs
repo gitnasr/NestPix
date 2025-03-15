@@ -1,5 +1,4 @@
 using NestPix.Services;
-using System.Text.Json;
 
 namespace NestPix
 {
@@ -23,20 +22,16 @@ namespace NestPix
         private async void start_Click(object sender, EventArgs e)
         {
             PathTextBox.Enabled = false;
-            // Get Directories and Sub Directories
             string FolderPath = PathTextBox.Text;
 
             FilesService FilesService = new FilesService(FolderPath);
 
 
-            var result = await FilesService.GetAllImages(UpdateUI);
+            await FilesService.GetAllImages(UpdateUI);
 
             PathTextBox.Enabled = true;
 
-            string json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
-
-            string filePath = "data.json";
-            File.WriteAllText(filePath, json);
+            new ViewerScreen().Show();
 
 
         }
