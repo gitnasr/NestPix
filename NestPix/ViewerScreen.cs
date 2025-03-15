@@ -6,6 +6,14 @@ namespace NestPix
     public partial class ViewerScreen : Form
     {
         NavigationService NS = new NavigationService();
+        DraggablePictureBox OverlyPictureBox = new DraggablePictureBox
+        {
+            SizeMode = PictureBoxSizeMode.Zoom,
+
+            Size = new Size(250, 250),
+            BackColor = Color.Transparent,
+
+        };
 
 
 
@@ -16,15 +24,21 @@ namespace NestPix
 
         private void ViewerScreen_Load(object sender, EventArgs e)
         {
+
+
+
             NextImage next = NS.GetNext();
             MainImage.Image = Image.FromFile(next.ImagePath);
 
             if (next.NextPreview != null)
             {
-                PreviewImage.Image = Image.FromFile(next.NextPreview);
+                OverlyPictureBox.Parent = MainImage;
+
+                OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
             }
 
+            MainImage.Controls.Add(OverlyPictureBox);
 
         }
 
@@ -36,7 +50,7 @@ namespace NestPix
                 MainImage.Image = Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
-                    PreviewImage.Image = Image.FromFile(next.NextPreview);
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
                 }
             }
