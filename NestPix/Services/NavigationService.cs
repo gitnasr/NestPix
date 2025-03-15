@@ -1,78 +1,134 @@
-﻿namespace NestPix.Services
+﻿using NestPix.Types;
+
+namespace NestPix.Services
 {
+
     internal class NavigationService : FilesService
     {
-        int currentDirIndex = 0;
-        int currentContentIndex = -1;
+        int CurrentDirIndex = 0;
+        int CurrentImageIndex = -1;
+
+        KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
+
+        string? PreviewImage = null;
 
         public int GetDirsCount()
         {
-
             if (ImageFiles.Count == 0)
             {
                 throw new Exception("No Images Found");
             }
 
             return ImageFiles.Keys.Count;
+        }
 
+        private KeyValuePair<string, List<string>> GetDirByIndex(int index)
+        {
+            return ImageFiles.ElementAt(index);
+        }
+
+        private string FindInDirByIndex(string dir, int index)
+        {
+
+            return ImageFiles[dir].ElementAt(index);
 
         }
 
-        public List<string> GetDirContent(int index)
+        private NextDir GetNextDir()
         {
-            if (ImageFiles.Count == 0)
+            int NextFolderIndex = CurrentDirIndex + 1;
+            if (NextFolderIndex > ImageFiles.Count - 1)
             {
-                throw new Exception("No Images Found");
+                return new NextDir();
+            }
+            var NextDir = GetDirByIndex(NextFolderIndex);
+            if (NextDir.Key == null)
+            {
+
+                return new NextDir();
+
             }
 
-            return ImageFiles.ElementAtOrDefault(index).Value;
+            return new NextDir(CurrentDir.Key, NextDir);
         }
-        public List<string> GetDirContent(string folder_path)
+        private void GetPreview()
         {
-            if (ImageFiles.Count == 0)
+            int NextPreviewImage = CurrentImageIndex + 1;
+
+            if (NextPreviewImage > CurrentDir.Value.Count - 1)
             {
-                throw new Exception("No Images Found");
-            }
 
-            return ImageFiles[folder_path];
-        }
-        public string GetNext()
-        {
-
-            if (ImageFiles.Count == 0)
-            {
-                throw new Exception("No Images Found");
-            }
-
-            var currentDir = ImageFiles.ElementAt(currentDirIndex);
-
-
-            // check if we have image with the new index;
-
-            if (currentDir.Value.ElementAtOrDefault(++currentContentIndex) == null)
-            {
-                currentContentIndex = -1;
-                // No More Images in this dir 
-
-                // No More 
-                //Move to NextFolder
-                var nextFolder = GetDirContent(++currentDirIndex);
-                // check if there next folder
-                if (nextFolder == null)
+                var nextDir = GetNextDir();
+                if (nextDir.IsHasNext)
                 {
-                    throw new Exception("No More Images");
+                    var next = nextDir.Next;
+                    PreviewImage = FindInDirByIndex(next.Key, 0);
+
+                }
+            }
+            else
+            {
+                PreviewImage = FindInDirByIndex(CurrentDir.Key, NextPreviewImage);
+            }
+        }
+
+        public NextImage GetNext()
+        {
+            if (ImageFiles.Count == 0)
+            {
+                return new NextImage();
+            }
+
+            CurrentDir = GetDirByIndex(CurrentDirIndex);
+
+            if (CurrentDir.Key == null)
+            {
+                return new NextImage();
+            }
+
+
+            var DirContent = CurrentDir.Value;
+
+            int NextImageIndex = CurrentImageIndex + 1;
+
+            if (NextImageIndex > DirContent.Count - 1)
+            {
+                CurrentImageIndex = -1;
+
+                NextDir nextDir = GetNextDir();
+
+                if (nextDir.IsHasNext)
+                {
+                    CurrentDirIndex += 1;
+                    CurrentDir = nextDir.Next;
+
+                }
+                else
+                {
+
+
+                    return new NextImage();
                 }
 
-                return ImageFiles.ElementAt(currentDirIndex).Value.ElementAt(++currentContentIndex);
-
 
 
             }
 
-            return ImageFiles.ElementAt(currentDirIndex).Value.ElementAt(currentContentIndex);
+            CurrentImageIndex++;
+
+            GetPreview();
+
+            if (PreviewImage != null)
+            {
+                return new NextImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+
+            }
+            return new NextImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
 
 
 
         }
+
+
     }
 }

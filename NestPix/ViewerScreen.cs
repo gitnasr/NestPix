@@ -1,10 +1,12 @@
 ﻿using NestPix.Services;
+using NestPix.Types;
 
 namespace NestPix
 {
     public partial class ViewerScreen : Form
     {
         NavigationService NS = new NavigationService();
+
 
 
         public ViewerScreen()
@@ -14,21 +16,38 @@ namespace NestPix
 
         private void ViewerScreen_Load(object sender, EventArgs e)
         {
+            NextImage next = NS.GetNext();
+            MainImage.Image = Image.FromFile(next.ImagePath);
+
+            if (next.NextPreview != null)
+            {
+                PreviewImage.Image = Image.FromFile(next.NextPreview);
+
+            }
 
 
-
-            MainImage.Image = Image.FromFile(NS.GetNext());
-
-        }
-
-        private void MainImage_Click(object sender, EventArgs e)
-        {
         }
 
         private void MainImage_MouseClick(object sender, MouseEventArgs e)
         {
-            MainImage.Image = Image.FromFile(NS.GetNext());
+            NextImage next = NS.GetNext();
+            if (next.ImagePath != null)
+            {
+                MainImage.Image = Image.FromFile(next.ImagePath);
+                if (next.NextPreview != null)
+                {
+                    PreviewImage.Image = Image.FromFile(next.NextPreview);
+
+                }
+            }
+            if (!next.IsHasNext)
+            {
+                MessageBox.Show("EOF");
+            }
+
 
         }
+
+
     }
 }

@@ -129,7 +129,6 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "NestPix";
             TopMost = true;
-            Load += StartScreen_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);

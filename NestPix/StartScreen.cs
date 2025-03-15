@@ -51,9 +51,6 @@ namespace NestPix
             }
         }
 
-        private void StartScreen_Load(object sender, EventArgs e)
-        {
 
-        }
     }
 }
