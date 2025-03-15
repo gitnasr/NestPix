@@ -12,7 +12,7 @@
 
         public FilesService()
         {
-            FolderPath = string.Empty; /
+            FolderPath = string.Empty;
         }
 
         public FilesService(string path)
