@@ -23,7 +23,12 @@ namespace NestPix
 
         private void MainImage_Click(object sender, EventArgs e)
         {
+        }
+
+        private void MainImage_MouseClick(object sender, MouseEventArgs e)
+        {
             MainImage.Image = Image.FromFile(NS.GetNext());
+
         }
     }
 }

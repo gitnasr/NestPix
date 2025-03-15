@@ -63,7 +63,7 @@
                     throw new Exception("No More Images");
                 }
 
-                return ImageFiles.ElementAt(currentDirIndex).Value.ElementAt(0);
+                return ImageFiles.ElementAt(currentDirIndex).Value.ElementAt(++currentContentIndex);
 
 
 

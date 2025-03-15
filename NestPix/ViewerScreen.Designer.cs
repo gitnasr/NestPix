@@ -40,6 +40,7 @@
             MainImage.TabIndex = 0;
             MainImage.TabStop = false;
             MainImage.Click += MainImage_Click;
+            MainImage.MouseClick += MainImage_MouseClick;
             // 
             // ViewerScreen
             // 
