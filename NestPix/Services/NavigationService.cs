@@ -11,8 +11,7 @@ namespace NestPix.Services
         KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
 
         string? PreviewImage = null;
-        public delegate void DirChangedHandler();
-        public event DirChangedHandler StockPriceChanged;
+
 
         public int GetDirsCount()
         {
@@ -35,7 +34,16 @@ namespace NestPix.Services
             return ImageFiles[dir].ElementAt(index);
 
         }
-
+        private NextDir GetPreviousDir()
+        {
+            int previousFolderIndex = CurrentDirIndex - 1;
+            if (previousFolderIndex < 0)
+            {
+                return new NextDir();
+            }
+            var previousDir = GetDirByIndex(previousFolderIndex);
+            return new NextDir(CurrentDir.Key, previousDir);
+        }
         private NextDir GetNextDir()
         {
             int NextFolderIndex = CurrentDirIndex + 1;
@@ -55,25 +63,61 @@ namespace NestPix.Services
         }
         private void GetPreview()
         {
-            int NextPreviewImage = CurrentImageIndex + 1;
+            int nextPreviewImage = CurrentImageIndex + 1;
 
-            if (NextPreviewImage > CurrentDir.Value.Count - 1)
+            if (nextPreviewImage < CurrentDir.Value.Count)
             {
-
-                var nextDir = GetNextDir();
-                if (nextDir.IsHasNext)
-                {
-                    var next = nextDir.Next;
-                    PreviewImage = FindInDirByIndex(next.Key, 0);
-
-                }
+                PreviewImage = FindInDirByIndex(CurrentDir.Key, nextPreviewImage);
             }
             else
             {
-                PreviewImage = FindInDirByIndex(CurrentDir.Key, NextPreviewImage);
+                var nextDir = GetNextDir();
+                if (nextDir.IsHasNext)
+                {
+                    PreviewImage = FindInDirByIndex(nextDir.Next.Key, 0);
+                }
+                else
+                {
+                    PreviewImage = null;
+                }
             }
         }
+        public NextImage GetPrevious()
+        {
+            if (ImageFiles.Count == 0)
+            {
+                return new NextImage();
+            }
 
+            CurrentDir = GetDirByIndex(CurrentDirIndex);
+
+            if (CurrentImageIndex > 0)
+            {
+                CurrentImageIndex--;
+            }
+            else
+            {
+                NextDir previousDir = GetPreviousDir();
+                if (previousDir.IsHasNext)
+                {
+                    CurrentDirIndex -= 1;
+                    CurrentDir = previousDir.Next;
+                    CurrentImageIndex = CurrentDir.Value.Count - 1;
+                }
+                else
+                {
+                    return new NextImage();
+                }
+            }
+
+            GetPreview();
+
+            if (PreviewImage != null)
+            {
+                return new NextImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+            }
+            return new NextImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
+        }
         public NextImage GetNext()
         {
             if (ImageFiles.Count == 0)

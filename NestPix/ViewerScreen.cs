@@ -67,7 +67,6 @@ namespace NestPix
         {
             if (e.KeyCode == Config.Shortcuts["Delete"])
             {
-                MessageBox.Show("Delete");
             }
             else if (e.KeyCode == Config.Shortcuts["Next"])
             {
@@ -84,7 +83,16 @@ namespace NestPix
             }
             else if (e.KeyCode == Config.Shortcuts["Previous"])
             {
-                MessageBox.Show("Previous");
+                NextImage next = NS.GetPrevious();
+                MainImage.Image = Image.FromFile(next.ImagePath);
+                if (next.NextPreview != null)
+                {
+                    OverlyPictureBox.Parent = MainImage;
+                    label1.Text = NS.GetCurrentDir();
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+
+                }
+
             }
         }
     }
