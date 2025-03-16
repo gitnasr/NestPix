@@ -1,6 +1,6 @@
 ﻿namespace NestPix.Types
 {
-    sealed internal class NextImage
+    sealed internal class NImage
     {
         public string? ImagePath { get; } = null;
         public bool IsHasNext
@@ -12,14 +12,14 @@
         }
         public string? CurrentDir { get; }
         public string? NextPreview { get; }
-        public NextImage(string imagePath, string currentDir)
+        public NImage(string imagePath, string currentDir)
         {
             CurrentDir = currentDir;
             ImagePath = imagePath;
 
 
         }
-        public NextImage(string imagePath, string currentDir, string previewImage)
+        public NImage(string imagePath, string currentDir, string previewImage)
         {
             CurrentDir = currentDir;
             ImagePath = imagePath;
@@ -29,7 +29,7 @@
         }
 
 
-        public NextImage()
+        public NImage()
         {
             CurrentDir = null;
             ImagePath = null;

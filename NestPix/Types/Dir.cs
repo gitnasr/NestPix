@@ -1,6 +1,6 @@
 ﻿namespace NestPix.Types
 {
-    sealed internal class NextDir
+    sealed internal class Dir
     {
 
 
@@ -15,12 +15,12 @@
             }
         }
 
-        public NextDir()
+        public Dir()
         {
             Current = null;
             Next = new KeyValuePair<string, List<string>>();
         }
-        public NextDir(string current, KeyValuePair<string, List<string>> next)
+        public Dir(string current, KeyValuePair<string, List<string>> next)
         {
             Current = current;
 
