@@ -9,11 +9,11 @@ namespace NestPix
         DraggablePictureBox OverlyPictureBox = new DraggablePictureBox
         {
             SizeMode = PictureBoxSizeMode.Zoom,
-
             Size = new Size(250, 250),
             BackColor = Color.Transparent,
-
         };
+
+        private ConfigService Config = new ConfigService();
 
 
 
@@ -33,7 +33,7 @@ namespace NestPix
             if (next.NextPreview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-
+                label1.Text = NS.GetCurrentDir();
                 OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
             }
@@ -51,6 +51,7 @@ namespace NestPix
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+                    label1.Text = NS.GetCurrentDir();
 
                 }
             }
@@ -62,6 +63,29 @@ namespace NestPix
 
         }
 
+        private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Config.Shortcuts["Delete"])
+            {
+                MessageBox.Show("Delete");
+            }
+            else if (e.KeyCode == Config.Shortcuts["Next"])
+            {
+                NextImage next = NS.GetNext();
 
+                MainImage.Image = Image.FromFile(next.ImagePath);
+                if (next.NextPreview != null)
+                {
+                    OverlyPictureBox.Parent = MainImage;
+                    label1.Text = NS.GetCurrentDir();
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+
+                }
+            }
+            else if (e.KeyCode == Config.Shortcuts["Previous"])
+            {
+                MessageBox.Show("Previous");
+            }
+        }
     }
 }

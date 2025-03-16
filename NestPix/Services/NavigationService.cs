@@ -11,6 +11,8 @@ namespace NestPix.Services
         KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
 
         string? PreviewImage = null;
+        public delegate void DirChangedHandler();
+        public event DirChangedHandler StockPriceChanged;
 
         public int GetDirsCount()
         {
@@ -129,6 +131,9 @@ namespace NestPix.Services
 
         }
 
-
+        internal string GetCurrentDir()
+        {
+            return CurrentDir.Key;
+        }
     }
 }
