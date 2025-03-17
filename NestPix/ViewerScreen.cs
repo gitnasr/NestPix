@@ -1,4 +1,5 @@
 ﻿using NestPix.Services;
+using NestPix.Types;
 
 namespace NestPix
 {
@@ -26,13 +27,14 @@ namespace NestPix
 
 
 
-            Types.Pix next = NS.GetNext();
-            MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
+            Pix next = NS.GetNext();
+            if (next.ImagePath != null)
+                MainImage.Image = Image.FromFile(next.ImagePath);
 
             if (next.NextPreview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-                OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
+                OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
             }
 
@@ -42,13 +44,13 @@ namespace NestPix
 
         private void MainImage_MouseClick(object sender, MouseEventArgs e)
         {
-            Types.Pix next = NS.GetNext();
+            Pix next = NS.GetNext();
             if (next.ImagePath != null)
             {
-                MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
+                MainImage.Image = Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
-                    OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
                 }
             }
@@ -67,24 +69,24 @@ namespace NestPix
             }
             else if (e.KeyCode == Config.Shortcuts["Next"])
             {
-                Types.Pix next = NS.GetNext();
+                Pix next = NS.GetNext();
 
-                MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
+                MainImage.Image = Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Parent = MainImage;
-                    OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
                 }
             }
             else if (e.KeyCode == Config.Shortcuts["Previous"])
             {
-                Types.Pix next = NS.GetPrevious();
-                MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
+                Pix next = NS.GetPrevious();
+                MainImage.Image = Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Parent = MainImage;
-                    OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
+                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
                 }
 

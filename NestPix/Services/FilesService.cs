@@ -6,7 +6,8 @@
         private List<string> ImageExtensions = new List<string> {
                 ".jpg", ".jpeg", ".png", ".bmp", ".webp"
             };
-
+        private FileAttributes Skip = FileAttributes.Hidden | FileAttributes.System | FileAttributes.Compressed
+            | FileAttributes.ReadOnly | FileAttributes.Encrypted;
         private string FolderPath { get; set; }
         protected static Dictionary<string, List<string>> ImageFiles = new Dictionary<string, List<string>>();
 
@@ -40,7 +41,7 @@
                 foreach (var file in Directory.EnumerateFiles(FolderPath, "*.*", new EnumerationOptions
                 {
                     RecurseSubdirectories = true,
-                    AttributesToSkip = FileAttributes.Hidden | FileAttributes.System
+                    AttributesToSkip = Skip
                 }))
                 {
                     if (ImageExtensions.Contains(Path.GetExtension(file).ToLower()))
@@ -55,9 +56,9 @@
                             AddFile(DirName, file);
                         }
                     }
-                    updateStatus?.Invoke($"{Path.GetDirectoryName(file)}");
+                    updateStatus.Invoke($"{Path.GetDirectoryName(file)}");
                 }
-                updateStatus?.Invoke($"We got {ImageFiles.Count}, Sorting ... ");
+                updateStatus.Invoke($"We got {ImageFiles.Count}, Sorting ... ");
 
                 var sorted = ImageFiles.OrderBy(image => image.Key)
                     .ToDictionary(
@@ -68,6 +69,9 @@
                 updateStatus?.Invoke($"We got {ImageFiles.Count}");
 
                 ImageFiles = sorted;
+                var OnlyImages = ImageFiles.Values.SelectMany(list => list).ToList();
+                HashService hashService = new HashService(OnlyImages);
+                hashService.Start();
             });
         }
     }

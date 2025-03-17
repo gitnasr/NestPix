@@ -163,13 +163,14 @@ namespace NestPix.Services
             CurrentImageIndex++;
 
             GetPreview();
-
+            var CurrentImage = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
             if (PreviewImage != null)
             {
-                return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+                return new Pix(CurrentImage, CurrentDir.Key, PreviewImage);
 
             }
-            return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
+
+            return new Pix(CurrentImage, CurrentDir.Key);
 
 
 
