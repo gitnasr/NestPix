@@ -64,10 +64,10 @@ namespace NestPix
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Config.Shortcuts["Delete"])
+            if (e.KeyCode == Config.Shortcuts[Actions.Delete])
             {
             }
-            else if (e.KeyCode == Config.Shortcuts["Next"])
+            else if (e.KeyCode == Config.Shortcuts[Actions.Next])
             {
                 Pix next = NS.GetNext();
 
@@ -79,7 +79,7 @@ namespace NestPix
 
                 }
             }
-            else if (e.KeyCode == Config.Shortcuts["Previous"])
+            else if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
                 Pix next = NS.GetPrevious();
                 MainImage.Image = Image.FromFile(next.ImagePath);
