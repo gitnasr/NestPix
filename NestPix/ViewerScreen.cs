@@ -64,33 +64,33 @@ namespace NestPix
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Config.Shortcuts[Actions.Delete])
-            {
-            }
-            else if (e.KeyCode == Config.Shortcuts[Actions.Next])
-            {
-                Pix next = NS.GetNext();
+            //if (e.KeyCode == Config.Shortcuts[Actions.Delete])
+            //{
+            //}
+            //else if (e.KeyCode == Config.Shortcuts[Actions.Next])
+            //{
+            //    Pix next = NS.GetNext();
 
-                MainImage.Image = Image.FromFile(next.ImagePath);
-                if (next.NextPreview != null)
-                {
-                    OverlyPictureBox.Parent = MainImage;
-                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+            //    MainImage.Image = Image.FromFile(next.ImagePath);
+            //    if (next.NextPreview != null)
+            //    {
+            //        OverlyPictureBox.Parent = MainImage;
+            //        OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
-                }
-            }
-            else if (e.KeyCode == Config.Shortcuts[Actions.Previous])
-            {
-                Pix next = NS.GetPrevious();
-                MainImage.Image = Image.FromFile(next.ImagePath);
-                if (next.NextPreview != null)
-                {
-                    OverlyPictureBox.Parent = MainImage;
-                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+            //    }
+            //}
+            //else if (e.KeyCode == Config.Shortcuts[Actions.Previous])
+            //{
+            //    Pix next = NS.GetPrevious();
+            //    MainImage.Image = Image.FromFile(next.ImagePath);
+            //    if (next.NextPreview != null)
+            //    {
+            //        OverlyPictureBox.Parent = MainImage;
+            //        OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
-                }
+            //    }
 
-            }
+            //}
         }
     }
 }

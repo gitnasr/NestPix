@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace NestPix.Models
 {
@@ -9,6 +10,7 @@ namespace NestPix.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}app.db";
+            optionsBuilder.LogTo(message => Debug.WriteLine(message));
 
             optionsBuilder.UseSqlite($"Data Source={databasePath}");
             base.OnConfiguring(optionsBuilder);

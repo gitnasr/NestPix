@@ -1,4 +1,5 @@
 using NestPix.Services;
+using NestPix.UI;
 
 namespace NestPix
 {
@@ -51,6 +52,10 @@ namespace NestPix
             }
         }
 
-
+        private void editKeybindgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditShortcuts EditShortcuts = new EditShortcuts();
+            EditShortcuts.ShowDialog();
+        }
     }
 }

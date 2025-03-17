@@ -8,22 +8,23 @@ namespace NestPix.Services
     }
     internal class ConfigService
     {
-        public Dictionary<Actions, Keys> Shortcuts { private set; get; } = new Dictionary<Actions, Keys>();
+        private Dictionary<Actions, Keys> Shortcuts { set; get; } = new Dictionary<Actions, Keys>();
 
         public ConfigService()
         {
+
+
+
+        }
+
+        public Dictionary<Actions, Keys> LoadShortcuts()
+        {
             LoadShortcutsFromDatabase();
-            if (Shortcuts.Count == 0)
+            if (Shortcuts.Count < Enum.GetValues(typeof(Actions)).Length)
             {
                 LoadDefault();
-                MessageBox.Show("Using Default");
             }
-            else
-            {
-                MessageBox.Show("Using Database");
-            }
-
-
+            return Shortcuts;
         }
 
         private void LoadDefault()
@@ -39,6 +40,10 @@ namespace NestPix.Services
             Shortcuts = shortcutService.GetShortcuts();
         }
 
+        internal void AssignShortcut(Keys key, Actions action)
+        {
 
+            Shortcuts[action] = key;
+        }
     }
 }

@@ -102,6 +102,7 @@
             editKeybindgToolStripMenuItem.Name = "editKeybindgToolStripMenuItem";
             editKeybindgToolStripMenuItem.Size = new Size(138, 29);
             editKeybindgToolStripMenuItem.Text = "Edit Keybindg";
+            editKeybindgToolStripMenuItem.Click += editKeybindgToolStripMenuItem_Click;
             // 
             // StatusLabel
             // 
@@ -128,7 +129,6 @@
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "NestPix";
-            TopMost = true;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);
