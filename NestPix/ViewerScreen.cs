@@ -1,5 +1,4 @@
 ﻿using NestPix.Services;
-using NestPix.Types;
 
 namespace NestPix
 {
@@ -9,7 +8,7 @@ namespace NestPix
         DraggablePictureBox OverlyPictureBox = new DraggablePictureBox
         {
             SizeMode = PictureBoxSizeMode.Zoom,
-            Size = new Size(250, 250),
+            Size = new Size(450, 450),
             BackColor = Color.Transparent,
         };
 
@@ -27,13 +26,12 @@ namespace NestPix
 
 
 
-            Types.NImage next = NS.GetNext();
+            Types.Pix next = NS.GetNext();
             MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
 
             if (next.NextPreview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-                label1.Text = NS.GetCurrentDir();
                 OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
 
             }
@@ -44,14 +42,13 @@ namespace NestPix
 
         private void MainImage_MouseClick(object sender, MouseEventArgs e)
         {
-            Types.NImage next = NS.GetNext();
+            Types.Pix next = NS.GetNext();
             if (next.ImagePath != null)
             {
                 MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
-                    label1.Text = NS.GetCurrentDir();
 
                 }
             }
@@ -70,25 +67,23 @@ namespace NestPix
             }
             else if (e.KeyCode == Config.Shortcuts["Next"])
             {
-                Types.NImage next = NS.GetNext();
+                Types.Pix next = NS.GetNext();
 
                 MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Parent = MainImage;
-                    label1.Text = NS.GetCurrentDir();
                     OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
 
                 }
             }
             else if (e.KeyCode == Config.Shortcuts["Previous"])
             {
-                Types.NImage next = NS.GetPrevious();
+                Types.Pix next = NS.GetPrevious();
                 MainImage.Image = System.Drawing.Image.FromFile(next.ImagePath);
                 if (next.NextPreview != null)
                 {
                     OverlyPictureBox.Parent = MainImage;
-                    label1.Text = NS.GetCurrentDir();
                     OverlyPictureBox.Image = System.Drawing.Image.FromFile(next.NextPreview);
 
                 }

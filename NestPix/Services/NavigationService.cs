@@ -82,11 +82,11 @@ namespace NestPix.Services
                 }
             }
         }
-        public NImage GetPrevious()
+        public Pix GetPrevious()
         {
             if (ImageFiles.Count == 0)
             {
-                return new NImage();
+                return new Pix();
             }
 
             CurrentDir = GetDirByIndex(CurrentDirIndex);
@@ -106,7 +106,7 @@ namespace NestPix.Services
                 }
                 else
                 {
-                    return new NImage();
+                    return new Pix();
                 }
             }
 
@@ -114,22 +114,22 @@ namespace NestPix.Services
 
             if (PreviewImage != null)
             {
-                return new NImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+                return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
             }
-            return new NImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
+            return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
         }
-        public NImage GetNext()
+        public Pix GetNext()
         {
             if (ImageFiles.Count == 0)
             {
-                return new NImage();
+                return new Pix();
             }
 
             CurrentDir = GetDirByIndex(CurrentDirIndex);
 
             if (CurrentDir.Key == null)
             {
-                return new NImage();
+                return new Pix();
             }
 
 
@@ -153,7 +153,7 @@ namespace NestPix.Services
                 {
 
 
-                    return new NImage();
+                    return new Pix();
                 }
 
 
@@ -166,10 +166,10 @@ namespace NestPix.Services
 
             if (PreviewImage != null)
             {
-                return new NImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+                return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
 
             }
-            return new NImage(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
+            return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
 
 
 
