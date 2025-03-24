@@ -43,25 +43,7 @@ namespace NestPix
 
         }
 
-        private void MainImage_MouseClick(object sender, MouseEventArgs e)
-        {
-            Pix next = NS.GetNext();
-            if (next.ImagePath != null)
-            {
-                MainImage.Image = Image.FromFile(next.ImagePath);
-                if (next.NextPreview != null)
-                {
-                    OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
 
-                }
-            }
-            if (!next.IsHasNext)
-            {
-                MessageBox.Show("EOF");
-            }
-
-
-        }
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
@@ -109,6 +91,11 @@ namespace NestPix
 
 
 
+        }
+
+        private void MainImage_Click(object sender, EventArgs e)
+        {
+            OverlyPictureBox.Show();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿public class DraggablePictureBox : PictureBox
+﻿
+public class DraggablePictureBox : PictureBox
 {
     private bool isDragging = false;
     private Point offset;
@@ -9,6 +10,12 @@
         this.MouseDown += OnMouseDown;
         this.MouseMove += OnMouseMove;
         this.MouseUp += OnMouseUp;
+        this.Click += onClick;
+    }
+
+    private void onClick(object sender, EventArgs args)
+    {
+        this.Hide();
     }
 
     private void OnMouseDown(object sender, MouseEventArgs e)

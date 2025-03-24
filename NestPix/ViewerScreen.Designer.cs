@@ -41,7 +41,7 @@
             MainImage.SizeMode = PictureBoxSizeMode.Zoom;
             MainImage.TabIndex = 0;
             MainImage.TabStop = false;
-            MainImage.MouseClick += MainImage_MouseClick;
+            MainImage.Click += MainImage_Click;
             // 
             // ViewerScreen
             // 
