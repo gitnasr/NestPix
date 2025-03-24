@@ -80,6 +80,7 @@
             GoBackButton.TabIndex = 0;
             GoBackButton.Text = "____";
             GoBackButton.UseVisualStyleBackColor = true;
+            GoBackButton.Click += GoBackButton_Click;
             // 
             // groupBox3
             // 
@@ -99,6 +100,7 @@
             DeleteButton.TabIndex = 0;
             DeleteButton.Text = "____";
             DeleteButton.UseVisualStyleBackColor = true;
+            DeleteButton.Click += DeleteButton_Click;
             // 
             // statusStrip1
             // 
@@ -129,6 +131,8 @@
             MaximizeBox = false;
             Name = "EditShortcuts";
             StartPosition = FormStartPosition.CenterScreen;
+            FormClosing += EditShortcuts_FormClosing;
+            FormClosed += EditShortcuts_FormClosed;
             Load += EditShortcuts_Load;
             groupBox1.ResumeLayout(false);
             groupBox2.ResumeLayout(false);

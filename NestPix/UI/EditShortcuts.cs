@@ -22,22 +22,26 @@ namespace NestPix.UI
         }
         private void AssignShortcut(Keys key, Actions action)
         {
+            bool isAdded = config.AssignShortcut(key, action);
+
+            if (!isAdded)
+            {
+                throw new Exception("Key already assigned");
+            }
             switch (action)
             {
                 case Actions.Next:
                     GoNextButton.Text = key.ToString();
-                    config.AssignShortcut(key, action);
                     break;
                 case Actions.Previous:
                     GoBackButton.Text = key.ToString();
-                    config.AssignShortcut(key, action);
-
                     break;
                 case Actions.Delete:
                     DeleteButton.Text = key.ToString();
-                    config.AssignShortcut(key, action);
                     break;
             }
+
+
         }
         private void RenderShortcuts()
         {
@@ -63,20 +67,57 @@ namespace NestPix.UI
         {
             RenderShortcuts();
         }
+        private void Assign(KeyEventArgs Key)
+        {
+            try
+            {
+                if (currentAction.HasValue)
+                {
+                    AssignShortcut(Key.KeyCode, currentAction.Value);
+                    StautsBarLabel.Text = $"Shortcut of {currentAction.Value.ToString()} assigned to Key {Key.KeyCode}";
+                    currentAction = null;
+                    Key.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
         private void EditShortcuts_KeyDown(object sender, KeyEventArgs e)
         {
-            if (currentAction.HasValue)
-            {
-                AssignShortcut(e.KeyCode, currentAction.Value);
-                StautsBarLabel.Text = $"Shortcut of {currentAction.Value.ToString()} assigned to Key {e.KeyCode}";
-                currentAction = null;
-                e.Handled = true;
-            }
+            Assign(e);
         }
         private void GoNextButton_Click(object sender, EventArgs e)
         {
             currentAction = Actions.Next;
             StautsBarLabel.Text = "Press any key to assign to the Next action";
+
+        }
+
+        private void EditShortcuts_FormClosing(object sender, FormClosingEventArgs e)
+        {
+        }
+
+        private void EditShortcuts_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            config.SaveShortcuts();
+
+        }
+
+        private void GoBackButton_Click(object sender, EventArgs e)
+        {
+            currentAction = Actions.Previous;
+            StautsBarLabel.Text = "Press any key to assign to the Previous action";
+
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            currentAction = Actions.Delete;
+            StautsBarLabel.Text = "Press any key to assign to the Delete action";
 
         }
     }
