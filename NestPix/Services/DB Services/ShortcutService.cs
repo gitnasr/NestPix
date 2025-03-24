@@ -5,7 +5,6 @@ namespace NestPix.Services.DB_Services
     internal class ShortcutService
     {
         public ShortcutService() { }
-        public ShortcutService(string name) { }
 
         public void AddShortcut(string name, Keys key, Actions action)
         {
@@ -22,10 +21,6 @@ namespace NestPix.Services.DB_Services
                 db.SaveChanges();
 
             }
-        }
-        public void RemoveShortcut(string name)
-        {
-            // Remove a shortcut from the database
         }
 
         public void UpdateShortcut(string name, Keys key, Actions action)
@@ -48,10 +43,6 @@ namespace NestPix.Services.DB_Services
             }
         }
 
-        public void GetShortcut(string name)
-        {
-            // Get a shortcut from the database
-        }
 
         public Dictionary<Actions, Keys> GetShortcuts()
         {
