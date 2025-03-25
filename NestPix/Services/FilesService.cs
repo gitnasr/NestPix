@@ -70,7 +70,7 @@
 
                 ImageFiles = sorted;
                 var OnlyImages = ImageFiles.Values.SelectMany(list => list).ToList();
-                HashService hashService = new HashService(OnlyImages);
+                HashLayer hashService = new HashLayer(OnlyImages);
                 hashService.Start();
             });
         }

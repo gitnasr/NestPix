@@ -1,26 +1,32 @@
 ﻿using CoenM.ImageHash;
 using CoenM.ImageHash.HashAlgorithms;
+using NestPix.Services.DB_Services;
 
 namespace NestPix.Services
 {
-    internal class HashService
+    internal class HashLayer
     {
         readonly AverageHash hashAlgorithm = new AverageHash();
+        readonly HashService hashService = new HashService();
         List<string> Files = new List<string>();
-        public HashService(List<string> files)
+        public HashLayer(List<string> files)
         {
-
             Files = files;
         }
         public void Start()
         {
             Task.Run(() =>
             {
+                var existingHashes = hashService.GetHashes();
+                // exclude files that have already been hashed
+                Files = Files.Where(file => !existingHashes.Any(hash => hash.FileName == file)).ToList();
                 foreach (var file in Files)
                 {
 
                     var hash = ComputeHash(file);
-                    System.Diagnostics.Debug.WriteLine($"[HashingService] File: {file}, Hash: {hash}");
+
+                    hashService.AddHash(hash, file);
+                    //Debug.WriteLine($"[HashingService] File: {file}, Hash: {hash}");
                 }
 
                 return Task.CompletedTask;

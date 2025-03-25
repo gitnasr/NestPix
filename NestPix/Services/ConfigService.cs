@@ -23,6 +23,7 @@ namespace NestPix.Services
             if (Shortcuts.Count == 0)
             {
                 LoadDefault();
+                SaveShortcuts();
             }
             return Shortcuts;
         }
