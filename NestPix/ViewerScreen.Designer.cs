@@ -50,7 +50,7 @@
             AutoSize = true;
             ClientSize = new Size(1172, 1312);
             Controls.Add(MainImage);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
             Name = "ViewerScreen";
             StartPosition = FormStartPosition.CenterScreen;
