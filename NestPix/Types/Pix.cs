@@ -11,7 +11,7 @@
             }
         }
         public string? CurrentDir { get; }
-        public string? NextPreview { get; }
+        public string? Preview { get; }
         public Pix(string imagePath, string currentDir)
         {
             CurrentDir = currentDir;
@@ -23,7 +23,7 @@
         {
             CurrentDir = currentDir;
             ImagePath = imagePath;
-            NextPreview = previewImage;
+            Preview = previewImage;
 
 
         }

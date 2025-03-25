@@ -32,10 +32,10 @@ namespace NestPix
             if (next.ImagePath != null)
                 MainImage.Image = Image.FromFile(next.ImagePath);
 
-            if (next.NextPreview != null)
+            if (next.Preview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-                OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+                OverlyPictureBox.Image = Image.FromFile(next.Preview);
 
             }
 
@@ -62,22 +62,22 @@ namespace NestPix
                 if (next.ImagePath != null)
                 {
                     MainImage.Image = Image.FromFile(next.ImagePath);
-                    if (next.NextPreview != null)
+                    if (next.Preview != null)
                     {
-                        OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+                        OverlyPictureBox.Image = Image.FromFile(next.Preview);
                     }
                 }
             }
 
             if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
-                Pix next = NS.GetPrevious();
-                if (next.ImagePath != null)
+                Pix Previous = NS.GetPrevious();
+                if (Previous.ImagePath != null)
                 {
-                    MainImage.Image = Image.FromFile(next.ImagePath);
-                    if (next.NextPreview != null)
+                    MainImage.Image = Image.FromFile(Previous.ImagePath);
+                    if (Previous.Preview != null)
                     {
-                        OverlyPictureBox.Image = Image.FromFile(next.NextPreview);
+                        OverlyPictureBox.Image = Image.FromFile(Previous.Preview);
                     }
                 }
             }
