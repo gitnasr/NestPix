@@ -47,7 +47,7 @@ namespace NestPix
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
-
+            Pix? Pixy = null;
 
             if (e.KeyCode == Keys.Escape)
             {
@@ -58,28 +58,14 @@ namespace NestPix
 
             if (e.KeyCode == Config.Shortcuts[Actions.Next])
             {
-                Pix next = NS.GetNext();
-                if (next.ImagePath != null)
-                {
-                    MainImage.Image = Image.FromFile(next.ImagePath);
-                    if (next.Preview != null)
-                    {
-                        OverlyPictureBox.Image = Image.FromFile(next.Preview);
-                    }
-                }
+                Pixy = NS.GetNext();
+
             }
 
             if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
-                Pix Previous = NS.GetPrevious();
-                if (Previous.ImagePath != null)
-                {
-                    MainImage.Image = Image.FromFile(Previous.ImagePath);
-                    if (Previous.Preview != null)
-                    {
-                        OverlyPictureBox.Image = Image.FromFile(Previous.Preview);
-                    }
-                }
+                Pixy = NS.GetPrevious();
+
             }
 
             if (e.KeyCode == Config.Shortcuts[Actions.Delete])
@@ -87,7 +73,18 @@ namespace NestPix
                 // Delete Action
                 MessageBox.Show("Delete Action");
             }
-
+            if (Pixy == null)
+            {
+                return;
+            }
+            if (Pixy.ImagePath != null)
+            {
+                MainImage.Image = Image.FromFile(Pixy.ImagePath);
+                if (Pixy.Preview != null)
+                {
+                    OverlyPictureBox.Image = Image.FromFile(Pixy.Preview);
+                }
+            }
 
 
 
