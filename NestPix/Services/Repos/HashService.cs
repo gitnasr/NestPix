@@ -19,12 +19,20 @@ namespace NestPix.Services.DB_Services
                 db.SaveChanges();
             }
         }
-        // get all hashes from the database and return them as a list
+
         public List<Hash> GetHashes()
         {
             using (var db = new AppDB())
             {
                 List<Hash> hashes = db.Hashes.ToList();
+                return hashes;
+            }
+        }
+        public List<Hash> GetHashesByListOfFiles(List<string> files)
+        {
+            using (var db = new AppDB())
+            {
+                List<Hash> hashes = db.Hashes.Where(hash => files.Contains(hash.FileName)).ToList();
                 return hashes;
             }
         }

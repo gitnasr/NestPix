@@ -17,7 +17,7 @@ namespace NestPix.Services
         {
             Task.Run(() =>
             {
-                var existingHashes = hashService.GetHashes();
+                var existingHashes = hashService.GetHashesByListOfFiles(Files);
                 // exclude files that have already been hashed
                 Files = Files.Where(file => !existingHashes.Any(hash => hash.FileName == file)).ToList();
                 foreach (var file in Files)
