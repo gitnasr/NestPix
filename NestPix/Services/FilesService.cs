@@ -69,7 +69,11 @@
                 updateStatus?.Invoke($"We got {ImageFiles.Count}");
 
                 ImageFiles = sorted;
+                // Create a Session
+                SessionService sessionService = new SessionService();
                 var OnlyImages = ImageFiles.Values.SelectMany(list => list).ToList();
+                sessionService.CreateSession(FolderPath, 0, OnlyImages.Count);
+
                 HashLayer hashService = new HashLayer(OnlyImages);
                 hashService.Start();
             });

@@ -1,4 +1,6 @@
-﻿using NestPix.Types;
+﻿using NestPix.Models;
+using NestPix.Services.DB_Services;
+using NestPix.Types;
 
 namespace NestPix.Services
 {
@@ -176,9 +178,30 @@ namespace NestPix.Services
 
         }
 
-        internal string GetCurrentDir()
+
+
+        public void AddToCache(Pix pixy, Actions action)
         {
-            return CurrentDir.Key;
+            HashService hashService = new HashService();
+            // get session
+            SessionService sessionService = new SessionService();
+            var session = sessionService.GetLastSessionByFolder(pixy.CurrentDir);
+            // Add the current image to the cache
+            Cache cache = new Cache()
+            {
+                FileName = Path.GetFileName(pixy.ImagePath),
+                FolderName = pixy.CurrentDir,
+                FileSize = new FileInfo(pixy.ImagePath).Length.ToString(),
+                isDeleted = action == Actions.Delete ? true : false,
+                isSkipped = action == Actions.Next ? true : false,
+                Extension = Path.GetExtension(pixy.ImagePath),
+                CreatedAt = DateTime.Now,
+                HashID = hashService.GetHashByFileName(pixy.ImagePath).id,
+                SessionID = session.id,
+            };
+            CacheService cacheService = new CacheService();
+            cacheService.Add(cache);
         }
+
     }
 }

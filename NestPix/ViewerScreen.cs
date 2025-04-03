@@ -15,7 +15,7 @@ namespace NestPix
         };
 
         private ConfigService Config = new ConfigService();
-
+        private Pix Pixy;
 
 
         public ViewerScreen()
@@ -28,14 +28,14 @@ namespace NestPix
 
 
 
-            Pix next = NS.GetNext();
-            if (next.ImagePath != null)
-                MainImage.Image = Image.FromFile(next.ImagePath);
+            Pixy = NS.GetNext();
+            if (Pixy.ImagePath != null)
+                MainImage.Image = Image.FromFile(Pixy.ImagePath);
 
-            if (next.Preview != null)
+            if (Pixy.Preview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-                OverlyPictureBox.Image = Image.FromFile(next.Preview);
+                OverlyPictureBox.Image = Image.FromFile(Pixy.Preview);
 
             }
 
@@ -47,7 +47,6 @@ namespace NestPix
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            Pix? Pixy = null;
 
             if (e.KeyCode == Keys.Escape)
             {
@@ -58,6 +57,8 @@ namespace NestPix
 
             if (e.KeyCode == Config.Shortcuts[Actions.Next])
             {
+                NS.AddToCache(Pixy, Actions.Next);
+
                 Pixy = NS.GetNext();
 
             }
@@ -65,18 +66,18 @@ namespace NestPix
             if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
                 Pixy = NS.GetPrevious();
-
+                NS.AddToCache(Pixy, Actions.Previous);
             }
 
             if (e.KeyCode == Config.Shortcuts[Actions.Delete])
             {
+                NS.AddToCache(Pixy, Actions.Delete);
+
                 // Delete Action
+                Pixy = NS.GetNext();
                 MessageBox.Show("Delete Action");
             }
-            if (Pixy == null)
-            {
-                return;
-            }
+
             if (Pixy.ImagePath != null)
             {
                 MainImage.Image = Image.FromFile(Pixy.ImagePath);

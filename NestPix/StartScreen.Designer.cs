@@ -90,6 +90,7 @@
             menuStrip1.Size = new Size(794, 33);
             menuStrip1.TabIndex = 5;
             menuStrip1.Text = "menuStrip1";
+            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // toolStripMenuItem1
             // 

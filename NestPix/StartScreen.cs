@@ -57,5 +57,10 @@ namespace NestPix
             EditShortcuts EditShortcuts = new EditShortcuts();
             EditShortcuts.ShowDialog();
         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
     }
 }
