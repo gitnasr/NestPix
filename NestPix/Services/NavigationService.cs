@@ -13,7 +13,11 @@ namespace NestPix.Services
         KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
 
         string? PreviewImage = null;
+        SessionService sessionService = new SessionService();
 
+        Session? CurrentSession = null;
+        HashService hashService = new HashService();
+        CacheService cacheService = new CacheService();
 
         public int GetDirsCount()
         {
@@ -182,24 +186,42 @@ namespace NestPix.Services
 
         public void AddToCache(Pix pixy, Actions action)
         {
-            HashService hashService = new HashService();
-            // get session
-            SessionService sessionService = new SessionService();
-            var session = sessionService.GetLastSessionByFolder(pixy.CurrentDir);
+
+
+
+            if (pixy.CurrentDir == null)
+            {
+                throw new ArgumentNullException(nameof(pixy.CurrentDir), "CurrentDir cannot be null.");
+            }
+            if (pixy.ImagePath == null)
+            {
+                throw new ArgumentNullException(nameof(pixy.ImagePath), "ImagePath cannot be null.");
+            }
+            if (string.IsNullOrEmpty(pixy.CurrentDir))
+            {
+                throw new ArgumentException("CurrentDir cannot be empty.", nameof(pixy.CurrentDir));
+            }
+
+            CurrentSession ??= sessionService.GetLastSessionByFolder(pixy.CurrentDir);   // Current Dir will be the folder path of the partent
+
+            var hash = hashService.GetHashByFileName(pixy.ImagePath);
+            if (hash == null)
+            {
+                throw new Exception("Hash not found");
+            }
             // Add the current image to the cache
             Cache cache = new Cache()
             {
                 FileName = Path.GetFileName(pixy.ImagePath),
                 FolderName = pixy.CurrentDir,
                 FileSize = new FileInfo(pixy.ImagePath).Length.ToString(),
-                isDeleted = action == Actions.Delete ? true : false,
-                isSkipped = action == Actions.Next ? true : false,
+                isDeleted = action == Actions.Delete,
+                isSkipped = action == Actions.Next,
                 Extension = Path.GetExtension(pixy.ImagePath),
                 CreatedAt = DateTime.Now,
-                HashID = hashService.GetHashByFileName(pixy.ImagePath).id,
-                SessionID = session.id,
+                HashID = hash.id,
+                SessionID = CurrentSession.id,
             };
-            CacheService cacheService = new CacheService();
             cacheService.Add(cache);
         }
 

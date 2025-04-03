@@ -22,7 +22,7 @@ namespace NestPix.Services
                 db.SaveChanges();
             }
         }
-        public Session GetLastSessionByFolder(string Folder)
+        public Session? GetLastSessionByFolder(string Folder)
         {
             using (var db = new AppDB())
             {
@@ -34,12 +34,7 @@ namespace NestPix.Services
                 {
                     throw new DirectoryNotFoundException($"The specified folder does not exist: {Folder}");
                 }
-                // Check if session exists
-                // If it does, return it
-                // If it doesn't, create it
-                // and return it
 
-                // Check if session exists
                 var session = db.Sessions
                     .Where(s => s.Folder == Folder)
                     .OrderByDescending(s => s.CreatedAt)
@@ -47,14 +42,7 @@ namespace NestPix.Services
                 if (session == null)
                 {
 
-                    session = new Session
-                    {
-                        AlreadySeenCount = 0,
-                        FolderCount = 0,
-                        CreatedAt = DateTime.Now,
-                        LastInteraction = DateTime.Now,
-                        Folder = Folder
-                    };
+                    return null;
 
                 }
                 return session;
