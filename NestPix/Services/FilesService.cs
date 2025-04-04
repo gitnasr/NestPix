@@ -4,6 +4,7 @@
     internal class FilesService
     {
         SessionService sessionService = new SessionService();
+        CacheService cacheService = new CacheService();
         private List<string> ImageExtensions = new List<string> {
                 ".jpg", ".jpeg", ".png", ".bmp", ".webp"
             };
@@ -62,22 +63,41 @@
                 updateStatus.Invoke($"We got {ImageFiles.Count}, Sorting ... ");
 
                 var sorted = ImageFiles.OrderBy(image => image.Key)
-                    .ToDictionary(
-                        image => image.Key,
-                        image => image.Value.OrderBy(value => value).ToList()
-                    );
+                 .ToDictionary(
+                     image => image.Key,
+                     image => image.Value.OrderBy(value => value).ToList()
+                 );
 
                 updateStatus.Invoke($"We got {ImageFiles.Count}");
 
-                ImageFiles = sorted;
 
 
                 var AllDetectedImages = ImageFiles.Values.SelectMany(list => list).ToList();
-                var ImagesThatAreNotInDB = new List<string>();
+                var ImageInDatabase = cacheService.GetExistingCacheByParentFolder(FolderPath);
+                var ImagePathsInDb = new HashSet<string>(
+    ImageInDatabase.Select(c => Path.Combine(c.FolderPath, c.FileName))
+);
 
 
+                var FilteredImages = ImageFiles
+        .ToDictionary(
+            pair => pair.Key,
+            pair => pair.Value
+                        .Where(imagePath => !ImagePathsInDb.Contains(imagePath))
+                        .ToList()
+        )
+        .Where(pair => pair.Value.Any())
+        .ToDictionary(pair => pair.Key, pair => pair.Value);
 
-                sessionService.CreateSession(FolderPath, 0, AllDetectedImages.Count);
+
+                ImageFiles = FilteredImages;
+
+
+                int CountAlreadySeen = ImageFiles.Values
+                    .SelectMany(list => list)
+                    .Count();
+
+                sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
 
             });
         }

@@ -14,11 +14,19 @@ namespace NestPix.Services
                 db.SaveChanges();
             }
         }
-
-        public void GetExistingCacheByParentFolder(string ParentFolder)
+        /// <summary>
+        /// This method retrieves a list of Cache objects from the database that match the specified parent folder and are marked as skipped.
+        /// </summary>
+        /// <param name="ParentFolder"></param>
+        /// <returns>
+        /// List of Cache objects that match the specified parent folder and are marked as skipped.
+        /// </returns>
+        public List<Cache> GetExistingCacheByParentFolder(string ParentFolder)
         {
             using (var db = new AppDB())
             {
+                List<Cache> ParentRecords = db.Caches.Where(c => c.ParentFolder == ParentFolder && c.IsSkipped == true).ToList();
+                return ParentRecords;
 
             }
         }

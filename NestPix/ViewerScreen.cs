@@ -6,7 +6,7 @@ namespace NestPix
 {
     public partial class ViewerScreen : Form
     {
-        NavigationService NS = new NavigationService();
+        NavigationService NS;
         DraggablePictureBox OverlyPictureBox = new DraggablePictureBox
         {
             SizeMode = PictureBoxSizeMode.Zoom,
@@ -18,8 +18,9 @@ namespace NestPix
         private Pix Pixy;
 
 
-        public ViewerScreen()
+        public ViewerScreen(string ParentPath)
         {
+            NS = new NavigationService(ParentPath);
             InitializeComponent();
         }
 
@@ -72,10 +73,7 @@ namespace NestPix
             if (e.KeyCode == Config.Shortcuts[Actions.Delete])
             {
                 NS.AddToCache(Pixy, Actions.Delete);
-
-                // Delete Action
                 Pixy = NS.GetNext();
-                MessageBox.Show("Delete Action");
             }
 
             if (Pixy.ImagePath != null)

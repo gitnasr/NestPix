@@ -32,7 +32,7 @@ namespace NestPix
 
             PathTextBox.Enabled = true;
 
-            new ViewerScreen().Show();
+            new ViewerScreen(FolderPath).Show();
 
 
         }

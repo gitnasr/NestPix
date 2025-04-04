@@ -6,6 +6,7 @@ namespace NestPix.Services
 
     internal class NavigationService : FilesService
     {
+        private string ParentFolder { get; set; } = string.Empty;
         int CurrentDirIndex = 0;
         int CurrentImageIndex = -1;
 
@@ -16,7 +17,12 @@ namespace NestPix.Services
 
         Session? CurrentSession = null;
         CacheService cacheService = new CacheService();
+        public NavigationService(string ParentFolder)
+        {
 
+            this.ParentFolder = ParentFolder;
+
+        }
         public int GetDirsCount()
         {
             if (ImageFiles.Count == 0)
@@ -186,24 +192,15 @@ namespace NestPix.Services
         {
 
 
+            var session = CurrentSession ??= sessionService.GetLastSessionByFolder(ParentFolder);
 
-            if (pixy.CurrentDir == null)
-            {
-                throw new ArgumentNullException(nameof(pixy.CurrentDir), "CurrentDir cannot be null.");
-            }
             if (pixy.ImagePath == null)
             {
-                throw new ArgumentNullException(nameof(pixy.ImagePath), "ImagePath cannot be null.");
-            }
-            if (string.IsNullOrEmpty(pixy.CurrentDir))
-            {
-                throw new ArgumentException("CurrentDir cannot be empty.", nameof(pixy.CurrentDir));
+                throw new Exception("Image Path is null");
             }
 
-            var session = CurrentSession ??= sessionService.GetLastSessionByFolder(pixy.CurrentDir);   // Current Dir will be the folder path of the partent
 
 
-            // Add the current image to the cache
             Cache cache = new Cache()
             {
                 FileName = Path.GetFileName(pixy.ImagePath),
@@ -213,7 +210,7 @@ namespace NestPix.Services
                 IsSkipped = action == Actions.Next,
                 Extension = Path.GetExtension(pixy.ImagePath),
                 CreatedAt = DateTime.Now,
-                SessionId = session != null ? session.id : 0,
+                SessionId = session.id,
                 ParentFolder = session?.Folder,
             };
             cacheService.Add(cache);
