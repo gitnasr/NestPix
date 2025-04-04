@@ -3,6 +3,7 @@
 
     internal class FilesService
     {
+        SessionService sessionService = new SessionService();
         private List<string> ImageExtensions = new List<string> {
                 ".jpg", ".jpeg", ".png", ".bmp", ".webp"
             };
@@ -66,16 +67,18 @@
                         image => image.Value.OrderBy(value => value).ToList()
                     );
 
-                updateStatus?.Invoke($"We got {ImageFiles.Count}");
+                updateStatus.Invoke($"We got {ImageFiles.Count}");
 
                 ImageFiles = sorted;
-                // Create a Session
-                SessionService sessionService = new SessionService();
-                var OnlyImages = ImageFiles.Values.SelectMany(list => list).ToList();
-                sessionService.CreateSession(FolderPath, 0, OnlyImages.Count);
 
-                HashLayer hashService = new HashLayer(OnlyImages);
-                hashService.Start();
+
+                var AllDetectedImages = ImageFiles.Values.SelectMany(list => list).ToList();
+                var ImagesThatAreNotInDB = new List<string>();
+
+
+
+                sessionService.CreateSession(FolderPath, 0, AllDetectedImages.Count);
+
             });
         }
     }

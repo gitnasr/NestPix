@@ -11,8 +11,8 @@ using NestPix.Models;
 namespace NestPix.Migrations
 {
     [DbContext(typeof(AppDB))]
-    [Migration("20250324230047_tabls")]
-    partial class tabls
+    [Migration("20250404141913_M1")]
+    partial class M1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,12 +41,16 @@ namespace NestPix.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FolderName")
+                    b.Property<string>("FolderPath")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("HashID")
+                    b.Property<int?>("HashID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ParentFolder")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SessionID")
                         .HasColumnType("INTEGER");
@@ -166,9 +170,7 @@ namespace NestPix.Migrations
                 {
                     b.HasOne("NestPix.Models.Hash", "Hash")
                         .WithMany()
-                        .HasForeignKey("HashID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HashID");
 
                     b.HasOne("NestPix.Models.Session", "Session")
                         .WithMany()

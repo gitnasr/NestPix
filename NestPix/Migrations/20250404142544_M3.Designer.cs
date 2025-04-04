@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NestPix.Models;
 
@@ -10,9 +11,11 @@ using NestPix.Models;
 namespace NestPix.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20250404142544_M3")]
+    partial class M3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -41,6 +44,9 @@ namespace NestPix.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("HashId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -48,16 +54,41 @@ namespace NestPix.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ParentFolder")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SessionId")
+                    b.Property<int?>("SessionId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HashId");
+
                     b.HasIndex("SessionId");
 
                     b.ToTable("Caches");
+                });
+
+            modelBuilder.Entity("NestPix.Models.Hash", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HashValue")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Hashes");
                 });
 
             modelBuilder.Entity("NestPix.Models.Session", b =>
@@ -76,6 +107,7 @@ namespace NestPix.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Folder")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FolderCount")
@@ -87,6 +119,21 @@ namespace NestPix.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Sessions");
+                });
+
+            modelBuilder.Entity("NestPix.Models.SessionShortcut", b =>
+                {
+                    b.Property<int>("SessionID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ShortcutID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SessionID", "ShortcutID");
+
+                    b.HasIndex("ShortcutID");
+
+                    b.ToTable("SessionShortcuts");
                 });
 
             modelBuilder.Entity("NestPix.Models.Shortcuts", b =>
@@ -120,13 +167,36 @@ namespace NestPix.Migrations
 
             modelBuilder.Entity("Cache", b =>
                 {
+                    b.HasOne("NestPix.Models.Hash", "Hash")
+                        .WithMany()
+                        .HasForeignKey("HashId");
+
                     b.HasOne("NestPix.Models.Session", "Session")
                         .WithMany()
-                        .HasForeignKey("SessionId")
+                        .HasForeignKey("SessionId");
+
+                    b.Navigation("Hash");
+
+                    b.Navigation("Session");
+                });
+
+            modelBuilder.Entity("NestPix.Models.SessionShortcut", b =>
+                {
+                    b.HasOne("NestPix.Models.Session", "Session")
+                        .WithMany()
+                        .HasForeignKey("SessionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NestPix.Models.Shortcuts", "Shortcut")
+                        .WithMany()
+                        .HasForeignKey("ShortcutID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Session");
+
+                    b.Navigation("Shortcut");
                 });
 #pragma warning restore 612, 618
         }

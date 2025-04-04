@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NestPix.Migrations
 {
     /// <inheritdoc />
-    public partial class tabls : Migration
+    public partial class M1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,19 +45,38 @@ namespace NestPix.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Shortcuts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<int>(type: "INTEGER", nullable: false),
+                    Action = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UsingCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shortcuts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Caches",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SessionID = table.Column<int>(type: "INTEGER", nullable: false),
-                    HashID = table.Column<int>(type: "INTEGER", nullable: false),
+                    HashID = table.Column<int>(type: "INTEGER", nullable: true),
                     FileName = table.Column<string>(type: "TEXT", nullable: false),
-                    FolderName = table.Column<string>(type: "TEXT", nullable: false),
+                    FolderPath = table.Column<string>(type: "TEXT", nullable: false),
                     FileSize = table.Column<string>(type: "TEXT", nullable: false),
                     Extension = table.Column<string>(type: "TEXT", nullable: false),
                     isDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     isSkipped = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ParentFolder = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -67,8 +86,7 @@ namespace NestPix.Migrations
                         name: "FK_Caches_Hashes_HashID",
                         column: x => x.HashID,
                         principalTable: "Hashes",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_Caches_Sessions_SessionID",
                         column: x => x.SessionID,
@@ -131,6 +149,9 @@ namespace NestPix.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sessions");
+
+            migrationBuilder.DropTable(
+                name: "Shortcuts");
         }
     }
 }

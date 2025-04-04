@@ -1,22 +1,17 @@
-﻿namespace NestPix.Models
+﻿using NestPix.Models;
+
+internal class Cache
 {
-    internal class Cache
-    {
-        public int id { get; set; }
-        public int SessionID { get; set; }
-        public Session Session { get; set; }
+    public int Id { get; set; }
+    public int SessionId { get; set; }
+    public Session Session { get; set; }
 
-        public int HashID { get; set; }
-        public Hash Hash { get; set; }
-
-        public string FileName { get; set; }
-        public string FolderName { get; set; }
-        public string FileSize { get; set; }
-        public string Extension { get; set; }
-        public bool isDeleted { get; set; } = false;
-        public bool isSkipped { get; set; } = false;
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-    }
+    public string FileName { get; set; } = string.Empty;
+    public string FolderPath { get; set; } = string.Empty;
+    public long FileSize { get; set; }
+    public string Extension { get; set; } = string.Empty;
+    public bool IsDeleted { get; set; } = false;
+    public bool IsSkipped { get; set; } = false;
+    public string? ParentFolder { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

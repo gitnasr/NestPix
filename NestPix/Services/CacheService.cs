@@ -14,5 +14,13 @@ namespace NestPix.Services
                 db.SaveChanges();
             }
         }
+
+        public void GetExistingCacheByParentFolder(string ParentFolder)
+        {
+            using (var db = new AppDB())
+            {
+
+            }
+        }
     }
 }

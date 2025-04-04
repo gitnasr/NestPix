@@ -1,5 +1,4 @@
 ﻿using NestPix.Models;
-using NestPix.Services.DB_Services;
 using NestPix.Types;
 
 namespace NestPix.Services
@@ -16,7 +15,6 @@ namespace NestPix.Services
         SessionService sessionService = new SessionService();
 
         Session? CurrentSession = null;
-        HashService hashService = new HashService();
         CacheService cacheService = new CacheService();
 
         public int GetDirsCount()
@@ -202,25 +200,21 @@ namespace NestPix.Services
                 throw new ArgumentException("CurrentDir cannot be empty.", nameof(pixy.CurrentDir));
             }
 
-            CurrentSession ??= sessionService.GetLastSessionByFolder(pixy.CurrentDir);   // Current Dir will be the folder path of the partent
+            var session = CurrentSession ??= sessionService.GetLastSessionByFolder(pixy.CurrentDir);   // Current Dir will be the folder path of the partent
 
-            var hash = hashService.GetHashByFileName(pixy.ImagePath);
-            if (hash == null)
-            {
-                throw new Exception("Hash not found");
-            }
+
             // Add the current image to the cache
             Cache cache = new Cache()
             {
                 FileName = Path.GetFileName(pixy.ImagePath),
-                FolderName = pixy.CurrentDir,
-                FileSize = new FileInfo(pixy.ImagePath).Length.ToString(),
-                isDeleted = action == Actions.Delete,
-                isSkipped = action == Actions.Next,
+                FolderPath = pixy.CurrentDir,
+                FileSize = new FileInfo(pixy.ImagePath).Length,
+                IsDeleted = action == Actions.Delete,
+                IsSkipped = action == Actions.Next,
                 Extension = Path.GetExtension(pixy.ImagePath),
                 CreatedAt = DateTime.Now,
-                HashID = hash.id,
-                SessionID = CurrentSession.id,
+                SessionId = session != null ? session.id : 0,
+                ParentFolder = session?.Folder,
             };
             cacheService.Add(cache);
         }
