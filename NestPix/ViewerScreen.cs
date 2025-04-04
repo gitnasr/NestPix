@@ -67,7 +67,6 @@ namespace NestPix
             if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
                 Pixy = NS.GetPrevious();
-                NS.AddToCache(Pixy, Actions.Previous);
             }
 
             if (e.KeyCode == Config.Shortcuts[Actions.Delete])

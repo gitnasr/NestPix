@@ -74,20 +74,14 @@
 
                 var AllDetectedImages = ImageFiles.Values.SelectMany(list => list).ToList();
                 var ImageInDatabase = cacheService.GetExistingCacheByParentFolder(FolderPath);
-                var ImagePathsInDb = new HashSet<string>(
-    ImageInDatabase.Select(c => Path.Combine(c.FolderPath, c.FileName))
-);
+                var ImagePathsInDb = new HashSet<string>(ImageInDatabase.Select(c => Path.Combine(c.FolderPath, c.FileName)));
 
 
-                var FilteredImages = ImageFiles
-        .ToDictionary(
-            pair => pair.Key,
-            pair => pair.Value
+                var FilteredImages = ImageFiles.ToDictionary(pair => pair.Key,
+                    pair => pair.Value
                         .Where(imagePath => !ImagePathsInDb.Contains(imagePath))
-                        .ToList()
-        )
-        .Where(pair => pair.Value.Any())
-        .ToDictionary(pair => pair.Key, pair => pair.Value);
+                        .ToList()).Where(pair => pair.Value.Any())
+                        .ToDictionary(pair => pair.Key, pair => pair.Value);
 
 
                 ImageFiles = FilteredImages;

@@ -194,11 +194,10 @@ namespace NestPix.Services
 
             var session = CurrentSession ??= sessionService.GetLastSessionByFolder(ParentFolder);
 
-            if (pixy.ImagePath == null)
+            if (pixy.ImagePath is null || pixy.CurrentDir is null)
             {
-                throw new Exception("Image Path is null");
+                return;
             }
-
 
 
             Cache cache = new Cache()
