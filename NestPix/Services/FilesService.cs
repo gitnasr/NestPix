@@ -1,4 +1,6 @@
-﻿namespace NestPix.Services
+﻿using NestPix.Models;
+
+namespace NestPix.Services
 {
 
     internal class FilesService
@@ -87,12 +89,12 @@
                 ImageFiles = FilteredImages;
 
 
-                int CountAlreadySeen = ImageFiles.Values
+                int CountAlreadySeen = AllDetectedImages.Count - ImageFiles.Values
                     .SelectMany(list => list)
                     .Count();
 
-                sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
-
+                Session CurrentSession = sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
+                sessionService.SetCurrentSession(CurrentSession);
             });
         }
     }

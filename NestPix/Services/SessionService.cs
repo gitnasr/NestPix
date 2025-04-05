@@ -6,7 +6,16 @@ namespace NestPix.Services
     {
         public SessionService() { }
 
-        public void CreateSession(string folder, int AlreadySeenCount, int FoldersCount)
+        public static Session CurrentSession { get; private set; } = new Session();
+        public void SetCurrentSession(Session session)
+        {
+            if (session == null)
+            {
+                throw new ArgumentNullException(nameof(session), "Session cannot be null.");
+            }
+            CurrentSession = session;
+        }
+        public Session CreateSession(string folder, int AlreadySeenCount, int FoldersCount)
         {
             using (var db = new AppDB())
             {
@@ -20,6 +29,7 @@ namespace NestPix.Services
                 };
                 db.Sessions.Add(session);
                 db.SaveChanges();
+                return session;
             }
         }
         public Session? GetLastSessionByFolder(string Folder)
