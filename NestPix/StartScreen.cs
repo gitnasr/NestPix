@@ -1,5 +1,6 @@
 using NestPix.Services;
 using NestPix.UI;
+using System.Diagnostics;
 
 namespace NestPix
 {
@@ -59,9 +60,10 @@ namespace NestPix
             EditShortcuts.ShowDialog();
         }
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
 
+        private void openDeleteFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", ConfigService.DeleteFolderPath);
         }
     }
 }

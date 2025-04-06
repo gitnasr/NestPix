@@ -41,7 +41,24 @@ namespace NestPix.Services
         private string FindInDirByIndex(string dir, int index)
         {
 
-            return ImageFiles[dir].ElementAt(index);
+            try
+            {
+                return ImageFiles[dir].ElementAt(index);
+
+            }
+            catch (Exception)
+            {
+                if (ImageFiles[dir].Count == 0)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return ImageFiles[dir].ElementAt(0);
+
+                }
+            }
+
 
         }
         private Dir GetPreviousDir()
@@ -216,6 +233,46 @@ namespace NestPix.Services
             };
             cacheService.Add(cache);
         }
+        public List<Cache> GetMarkedAsDeleted()
+        {
+            Session session = sessionService.GetCurrentSession();
+            List<Cache> ImagesMarkedAsDeleted = cacheService.GetMarkedAsDeletedBySession(session);
+            return ImagesMarkedAsDeleted;
+        }
+        public async Task DeleteAll()
+        {
 
+
+            List<Cache> ImagesMarkedAsDeleted = GetMarkedAsDeleted();
+
+            foreach (var image in ImagesMarkedAsDeleted)
+            {
+                string ImagePath = Path.Combine(image.FolderPath, image.FileName);
+
+                bool isDeleted = ImageFiles[image.FolderPath].Remove(ImagePath);
+                if (!isDeleted)
+                {
+                    throw new Exception($"Image {image.FileName} not found in the list");
+                }
+                if (image.IsDeleted)
+                {
+                    if (File.Exists(ImagePath))
+                    {
+                        await Task.Run(() =>
+                            {
+                                string DestinationPath = Path.Combine(ConfigService.DeleteFolderPath, image.FileName);
+                                File.Move(ImagePath, DestinationPath);
+                            });
+                    }
+
+                }
+
+
+            }
+
+
+
+
+        }
     }
 }

@@ -9,12 +9,15 @@ namespace NestPix.Services
     internal class ConfigService
     {
         public Dictionary<Actions, Keys> Shortcuts { private set; get; } = new Dictionary<Actions, Keys>();
+        public static readonly string DeleteFolderPath = Path.Combine(Application.StartupPath, "DeletedContent");
 
         public ConfigService()
         {
-
+            if (!Directory.Exists(DeleteFolderPath))
+            {
+                Directory.CreateDirectory(DeleteFolderPath);
+            }
             LoadShortcuts();
-
         }
 
         public Dictionary<Actions, Keys> LoadShortcuts()

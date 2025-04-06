@@ -36,6 +36,7 @@
             toolStripMenuItem1 = new ToolStripMenuItem();
             editKeybindgToolStripMenuItem = new ToolStripMenuItem();
             StatusLabel = new LinkLabel();
+            openDeleteFolderToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -84,13 +85,12 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(24, 24);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, editKeybindgToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, editKeybindgToolStripMenuItem, openDeleteFolderToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(794, 33);
             menuStrip1.TabIndex = 5;
             menuStrip1.Text = "menuStrip1";
-            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // toolStripMenuItem1
             // 
@@ -114,6 +114,13 @@
             StatusLabel.TabIndex = 6;
             StatusLabel.TabStop = true;
             StatusLabel.Text = "Paste Link to Start ...";
+            // 
+            // openDeleteFolderToolStripMenuItem
+            // 
+            openDeleteFolderToolStripMenuItem.Name = "openDeleteFolderToolStripMenuItem";
+            openDeleteFolderToolStripMenuItem.Size = new Size(182, 29);
+            openDeleteFolderToolStripMenuItem.Text = "Open &Delete Folder";
+            openDeleteFolderToolStripMenuItem.Click += openDeleteFolderToolStripMenuItem_Click;
             // 
             // StartScreen
             // 
@@ -149,5 +156,6 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem editKeybindgToolStripMenuItem;
         private LinkLabel StatusLabel;
+        private ToolStripMenuItem openDeleteFolderToolStripMenuItem;
     }
 }

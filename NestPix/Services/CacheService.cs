@@ -30,5 +30,14 @@ namespace NestPix.Services
 
             }
         }
+        public List<Cache> GetMarkedAsDeletedBySession(Session session)
+        {
+            using (var db = new AppDB())
+            {
+                List<Cache> MarkedAsRemoved = db.Caches.Where(c => c.SessionId == session.id && c.IsDeleted == true).ToList();
+                return MarkedAsRemoved;
+            }
+        }
+
     }
 }

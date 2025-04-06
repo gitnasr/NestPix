@@ -68,5 +68,35 @@ namespace NestPix.Services
                 db.SaveChanges();
             }
         }
+
+        public void EndSession(Session session)
+        {
+            using (var db = new AppDB())
+            {
+                session.EndedAt = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
+        public void GetSessionById(int id)
+        {
+            using (var db = new AppDB())
+            {
+                var session = db.Sessions.Find(id);
+                if (session == null)
+                {
+                    throw new Exception($"Session with ID {id} not found.");
+                }
+                CurrentSession = session;
+            }
+        }
+
+        public Session GetCurrentSession()
+        {
+            if (CurrentSession == null)
+            {
+                throw new InvalidOperationException("Current session is not set.");
+            }
+            return CurrentSession;
+        }
     }
 }

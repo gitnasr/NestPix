@@ -18,6 +18,9 @@ namespace NestPix
         private Pix? Pixy;
         private int RemainingCount = 0;
 
+        private int MarkedAsDeletedCount = 0;
+
+
         private void RenderLabels()
         {
 
@@ -41,7 +44,13 @@ namespace NestPix
 
             Focus();
         }
-
+        private Image LoadImage(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                return Image.FromStream(stream);
+            }
+        }
         private void ViewerScreen_Load(object sender, EventArgs e)
         {
 
@@ -49,7 +58,10 @@ namespace NestPix
 
             Pixy = NS.GetNext();
             if (Pixy.ImagePath != null)
-            { MainImage.Image = Image.FromFile(Pixy.ImagePath); }
+            {
+
+                MainImage.Image = LoadImage(Pixy.ImagePath);
+            }
             else
             {
                 MessageBox.Show("All Images done");
@@ -59,7 +71,7 @@ namespace NestPix
             if (Pixy.Preview != null)
             {
                 OverlyPictureBox.Parent = MainImage;
-                OverlyPictureBox.Image = Image.FromFile(Pixy.Preview);
+                OverlyPictureBox.Image = LoadImage(Pixy.Preview);
 
             }
 
@@ -128,18 +140,26 @@ namespace NestPix
                     RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
                     RenderLabels();
 
+                    SaveButton.Enabled = true;
+                    MarkedAsDeletedCount++;
+
 
 
                 }
             }
             if (Pixy != null)
             {
-                if (Pixy.ImagePath != null)
+                if (Pixy.ImagePath != null &&
+
+                    string.IsNullOrEmpty(Pixy.ImagePath) == false && string.IsNullOrWhiteSpace(
+                        Pixy.ImagePath) == false && File.Exists(Pixy.ImagePath) == true
+                    )
                 {
-                    MainImage.Image = Image.FromFile(Pixy.ImagePath);
+                    MainImage.Image = LoadImage(Pixy.ImagePath);
+
                     if (Pixy.Preview != null)
                     {
-                        OverlyPictureBox.Image = Image.FromFile(Pixy.Preview);
+                        OverlyPictureBox.Image = LoadImage(Pixy.Preview);
                     }
                 }
                 else
@@ -173,9 +193,16 @@ namespace NestPix
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"You're about to delete about {0} photos. \n " +
-                $"It won't be deleted permanently, Photos will be moved to Temp Folder. \n" +
-                $"You can recover them later.", "Confirm Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show($"You're about to delete about {MarkedAsDeletedCount} photos. \n " +
+                   $"It won't be deleted permanently, Photos will be moved to Temp Folder. \n" +
+                   $"You can recover them later.", "Confirm Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                _ = NS.DeleteAll();
+                SaveButton.Enabled = false;
+                MarkedAsDeletedCount = 0;
+
+            }
         }
     }
 }
