@@ -18,6 +18,17 @@ namespace NestPix
         private Pix? Pixy;
         private int RemainingCount = 0;
 
+        private void RenderLabels()
+        {
+
+            CurrentFileLink.Text = Pixy.ImageName;
+            CurrentFolderLabel.Text = Pixy.CurrentDir;
+
+
+
+
+        }
+
         public ViewerScreen(string ParentPath)
         {
             InitializeComponent();
@@ -26,7 +37,7 @@ namespace NestPix
             MainFolderLabel.Text = SessionService.CurrentSession.Folder;
             AlreadySeenCountLabel.Text = "Already Seen: " + SessionService.CurrentSession.AlreadySeenCount;
             RemainingCount = (SessionService.CurrentSession.FolderCount - SessionService.CurrentSession.AlreadySeenCount);
-            RemaingCountLabel.Text = "Remaining: " + RemainingCount;
+            RemaingCountLabel.Text = $"Remaining: {RemainingCount}";
 
             Focus();
         }
@@ -42,7 +53,7 @@ namespace NestPix
             else
             {
                 MessageBox.Show("All Images done");
-                this.Close();
+                Close();
             }
 
             if (Pixy.Preview != null)
@@ -51,6 +62,8 @@ namespace NestPix
                 OverlyPictureBox.Image = Image.FromFile(Pixy.Preview);
 
             }
+
+            RenderLabels();
 
             MainImage.Controls.Add(OverlyPictureBox);
 
@@ -85,10 +98,8 @@ namespace NestPix
                     NS.AddToCache(Pixy, Actions.Next);
 
                     Pixy = NS.GetNext();
-                    RemaingCountLabel.Text = "Remaining: " + --RemainingCount;
-                    CurrentFileLink.Text = Pixy.ImagePath;
-
-
+                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
+                    RenderLabels();
 
                 }
 
@@ -101,8 +112,10 @@ namespace NestPix
             {
 
                 Pixy = NS.GetPrevious();
-                RemaingCountLabel.Text = "Remaining: " + ++RemainingCount;
-                CurrentFileLink.Text = Pixy.ImagePath;
+                RemaingCountLabel.Text = $"Remaining: {++RemainingCount}";
+                RenderLabels();
+
+
 
             }
 
@@ -112,8 +125,10 @@ namespace NestPix
                 {
                     NS.AddToCache(Pixy, Actions.Delete);
                     Pixy = NS.GetNext();
-                    RemaingCountLabel.Text = "Remaining: " + --RemainingCount;
-                    CurrentFileLink.Text = Pixy.ImagePath;
+                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
+                    RenderLabels();
+
+
 
                 }
             }
@@ -130,7 +145,7 @@ namespace NestPix
                 else
                 {
                     MessageBox.Show("All Images done");
-                    this.Close();
+                    Close();
                 }
             }
         }
@@ -154,6 +169,13 @@ namespace NestPix
             {
                 OpenInExplorer(Pixy.ImagePath);
             }
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"You're about to delete about {0} photos. \n " +
+                $"It won't be deleted permanently, Photos will be moved to Temp Folder. \n" +
+                $"You can recover them later.", "Confirm Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
     }
 }

@@ -45,7 +45,7 @@
             MainImage.Dock = DockStyle.Top;
             MainImage.Location = new Point(0, 0);
             MainImage.Name = "MainImage";
-            MainImage.Size = new Size(1210, 1223);
+            MainImage.Size = new Size(1210, 1296);
             MainImage.SizeMode = PictureBoxSizeMode.Zoom;
             MainImage.TabIndex = 0;
             MainImage.TabStop = false;
@@ -53,7 +53,8 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.Anchor = AnchorStyles.Left;
+            tableLayoutPanel1.AutoSize = true;
+            tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.636364F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.0909081F));
@@ -64,18 +65,19 @@
             tableLayoutPanel1.Controls.Add(CurrentFileLink, 2, 0);
             tableLayoutPanel1.Controls.Add(AlreadySeenCountLabel, 0, 1);
             tableLayoutPanel1.Controls.Add(SaveButton, 2, 1);
-            tableLayoutPanel1.Location = new Point(12, 1249);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(0, 1328);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1186, 81);
+            tableLayoutPanel1.Size = new Size(1210, 81);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // RemaingCountLabel
             // 
             RemaingCountLabel.AutoSize = true;
-            RemaingCountLabel.Location = new Point(164, 25);
+            RemaingCountLabel.Location = new Point(168, 25);
             RemaingCountLabel.Name = "RemaingCountLabel";
             RemaingCountLabel.Size = new Size(170, 25);
             RemaingCountLabel.TabIndex = 4;
@@ -85,9 +87,9 @@
             // 
             CurrentFolderLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             CurrentFolderLabel.AutoSize = true;
-            CurrentFolderLabel.Location = new Point(164, 0);
+            CurrentFolderLabel.Location = new Point(168, 0);
             CurrentFolderLabel.Name = "CurrentFolderLabel";
-            CurrentFolderLabel.Size = new Size(694, 25);
+            CurrentFolderLabel.Size = new Size(709, 25);
             CurrentFolderLabel.TabIndex = 1;
             CurrentFolderLabel.Text = "CurrentFolderLabel";
             CurrentFolderLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -107,9 +109,9 @@
             // 
             CurrentFileLink.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             CurrentFileLink.AutoSize = true;
-            CurrentFileLink.Location = new Point(864, 0);
+            CurrentFileLink.Location = new Point(883, 0);
             CurrentFileLink.Name = "CurrentFileLink";
-            CurrentFileLink.Size = new Size(319, 25);
+            CurrentFileLink.Size = new Size(324, 25);
             CurrentFileLink.TabIndex = 2;
             CurrentFileLink.TabStop = true;
             CurrentFileLink.Text = "CurrentFileLink";
@@ -121,25 +123,26 @@
             AlreadySeenCountLabel.AutoSize = true;
             AlreadySeenCountLabel.Location = new Point(3, 25);
             AlreadySeenCountLabel.Name = "AlreadySeenCountLabel";
-            AlreadySeenCountLabel.Size = new Size(152, 50);
+            AlreadySeenCountLabel.Size = new Size(158, 50);
             AlreadySeenCountLabel.TabIndex = 3;
             AlreadySeenCountLabel.Text = "AlreadySeenCountLabel";
             // 
             // SaveButton
             // 
-            SaveButton.Location = new Point(864, 28);
+            SaveButton.Location = new Point(883, 28);
             SaveButton.Name = "SaveButton";
-            SaveButton.Size = new Size(319, 50);
+            SaveButton.Size = new Size(318, 50);
             SaveButton.TabIndex = 5;
             SaveButton.Text = "Save Changes";
             SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += SaveButton_Click;
             // 
             // ViewerScreen
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(1210, 1342);
+            ClientSize = new Size(1210, 1409);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(MainImage);
             FormBorderStyle = FormBorderStyle.None;
@@ -154,6 +157,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

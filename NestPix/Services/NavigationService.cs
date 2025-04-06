@@ -121,12 +121,13 @@ namespace NestPix.Services
             }
 
             GetPreview();
-
+            string ImagePath = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
+            string ImageName = Path.GetFileName(ImagePath);
             if (PreviewImage != null)
             {
-                return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key, PreviewImage);
+                return new Pix(ImagePath, CurrentDir.Key, PreviewImage, ImageName);
             }
-            return new Pix(FindInDirByIndex(CurrentDir.Key, CurrentImageIndex), CurrentDir.Key);
+            return new Pix(ImagePath, CurrentDir.Key);
         }
         public Pix GetNext()
         {
@@ -174,9 +175,10 @@ namespace NestPix.Services
 
             GetPreview();
             var CurrentImage = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
+            var ImageName = Path.GetFileName(CurrentImage);
             if (PreviewImage != null)
             {
-                return new Pix(CurrentImage, CurrentDir.Key, PreviewImage);
+                return new Pix(CurrentImage, CurrentDir.Key, PreviewImage, ImageName);
 
             }
 
@@ -202,7 +204,7 @@ namespace NestPix.Services
 
             Cache cache = new Cache()
             {
-                FileName = Path.GetFileName(pixy.ImagePath),
+                FileName = pixy.ImageName,
                 FolderPath = pixy.CurrentDir,
                 FileSize = new FileInfo(pixy.ImagePath).Length,
                 IsDeleted = action == Actions.Delete,

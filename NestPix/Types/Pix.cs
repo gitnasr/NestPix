@@ -3,6 +3,7 @@
     sealed internal class Pix
     {
         public string? ImagePath { get; } = null;
+        public string? ImageName { get; } = null;
         public bool IsHasNext
         {
             get
@@ -19,11 +20,12 @@
 
 
         }
-        public Pix(string imagePath, string currentDir, string previewImage)
+        public Pix(string imagePath, string currentDir, string previewImage, string imageName)
         {
             CurrentDir = currentDir;
             ImagePath = imagePath;
             Preview = previewImage;
+            ImageName = imageName;
 
 
         }
