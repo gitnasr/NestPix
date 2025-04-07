@@ -10,6 +10,8 @@ namespace NestPix.Services
     {
         public Dictionary<Actions, Keys> Shortcuts { private set; get; } = new Dictionary<Actions, Keys>();
         public static readonly string DeleteFolderPath = Path.Combine(Application.StartupPath, "DeletedContent");
+        public static readonly double IdleTime = 0.1;
+        public static readonly double IdleTimeInSeconds = TimeSpan.FromMinutes(IdleTime).TotalSeconds;
 
         public ConfigService()
         {

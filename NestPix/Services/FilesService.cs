@@ -1,6 +1,4 @@
-﻿using NestPix.Models;
-
-namespace NestPix.Services
+﻿namespace NestPix.Services
 {
 
     internal class FilesService
@@ -10,10 +8,10 @@ namespace NestPix.Services
         private List<string> ImageExtensions = new List<string> {
                 ".jpg", ".jpeg", ".png", ".bmp", ".webp"
             };
-        private FileAttributes Skip = FileAttributes.Hidden | FileAttributes.System | FileAttributes.Compressed
+        private readonly FileAttributes ToSkip = FileAttributes.Hidden | FileAttributes.System | FileAttributes.Compressed
             | FileAttributes.ReadOnly | FileAttributes.Encrypted;
         private string FolderPath { get; set; }
-        protected static Dictionary<string, List<string>> ImageFiles = new Dictionary<string, List<string>>();
+        protected static Dictionary<string, List<string>> ImageFiles = new();
 
         public FilesService()
         {
@@ -45,7 +43,7 @@ namespace NestPix.Services
                 foreach (var file in Directory.EnumerateFiles(FolderPath, "*.*", new EnumerationOptions
                 {
                     RecurseSubdirectories = true,
-                    AttributesToSkip = Skip
+                    AttributesToSkip = ToSkip
                 }))
                 {
                     if (ImageExtensions.Contains(Path.GetExtension(file).ToLower()))
@@ -93,8 +91,8 @@ namespace NestPix.Services
                     .SelectMany(list => list)
                     .Count();
 
-                Session CurrentSession = sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
-                sessionService.SetCurrentSession(CurrentSession);
+                sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
+                sessionService.SetCurrentSession(sessionService.GetCurrentSession());
             });
         }
     }

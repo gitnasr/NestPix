@@ -139,10 +139,9 @@ namespace NestPix.Services
 
             GetPreview();
             string ImagePath = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
-            string ImageName = Path.GetFileName(ImagePath);
-            if (PreviewImage != null)
+            if (PreviewImage is not null)
             {
-                return new Pix(ImagePath, CurrentDir.Key, PreviewImage, ImageName);
+                return new Pix(ImagePath, CurrentDir.Key, PreviewImage);
             }
             return new Pix(ImagePath, CurrentDir.Key);
         }
@@ -195,7 +194,7 @@ namespace NestPix.Services
             var ImageName = Path.GetFileName(CurrentImage);
             if (PreviewImage != null)
             {
-                return new Pix(CurrentImage, CurrentDir.Key, PreviewImage, ImageName);
+                return new Pix(CurrentImage, CurrentDir.Key, PreviewImage);
 
             }
 
@@ -252,7 +251,7 @@ namespace NestPix.Services
                 bool isDeleted = ImageFiles[image.FolderPath].Remove(ImagePath);
                 if (!isDeleted)
                 {
-                    throw new Exception($"Image {image.FileName} not found in the list");
+                    throw new FileNotFoundException($"Image {image.FileName} not found in the list");
                 }
                 if (image.IsDeleted)
                 {

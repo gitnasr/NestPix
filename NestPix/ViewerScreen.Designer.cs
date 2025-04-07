@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             MainImage = new PictureBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             RemaingCountLabel = new Label();
@@ -36,6 +37,7 @@
             CurrentFileLink = new LinkLabel();
             AlreadySeenCountLabel = new Label();
             SaveButton = new Button();
+            IdleTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)MainImage).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -137,6 +139,12 @@
             SaveButton.UseVisualStyleBackColor = true;
             SaveButton.Click += SaveButton_Click;
             // 
+            // IdleTimer
+            // 
+            IdleTimer.Enabled = true;
+            IdleTimer.Interval = 5000;
+            IdleTimer.Tick += IdleTimer_Tick;
+            // 
             // ViewerScreen
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -170,5 +178,6 @@
         private Label RemaingCountLabel;
         private Label AlreadySeenCountLabel;
         private Button SaveButton;
+        private System.Windows.Forms.Timer IdleTimer;
     }
 }

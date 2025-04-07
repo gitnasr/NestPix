@@ -14,7 +14,7 @@ namespace NestPix
             InitializeComponent();
             UpdateUI = (string status) =>
             {
-                this.Invoke(() =>
+                Invoke(() =>
                 {
                     StatusLabel.Text = status;
                 });

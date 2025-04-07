@@ -15,7 +15,7 @@ namespace NestPix.Services
             }
             CurrentSession = session;
         }
-        public Session CreateSession(string folder, int AlreadySeenCount, int FoldersCount)
+        public void CreateSession(string folder, int AlreadySeenCount, int FoldersCount)
         {
             using (var db = new AppDB())
             {
@@ -29,7 +29,7 @@ namespace NestPix.Services
                 };
                 db.Sessions.Add(session);
                 db.SaveChanges();
-                return session;
+                CurrentSession = session;
             }
         }
         public Session? GetLastSessionByFolder(string Folder)
@@ -49,12 +49,7 @@ namespace NestPix.Services
                     .Where(s => s.Folder == Folder)
                     .OrderByDescending(s => s.CreatedAt)
                     .FirstOrDefault();
-                if (session == null)
-                {
 
-                    return null;
-
-                }
                 return session;
             }
 

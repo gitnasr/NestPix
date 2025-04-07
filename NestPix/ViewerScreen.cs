@@ -1,4 +1,5 @@
-﻿using NestPix.Services;
+﻿using NestPix.Helpers;
+using NestPix.Services;
 using NestPix.Types;
 using System.Diagnostics;
 
@@ -15,10 +16,11 @@ namespace NestPix
         };
 
         private ConfigService Config = new ConfigService();
-        private Pix? Pixy;
+        private Pix Pixy;
         private int RemainingCount = 0;
 
         private int MarkedAsDeletedCount = 0;
+
 
 
         private void RenderLabels()
@@ -38,17 +40,25 @@ namespace NestPix
 
             NS = new NavigationService(ParentPath);
             MainFolderLabel.Text = SessionService.CurrentSession.Folder;
-            AlreadySeenCountLabel.Text = "Already Seen: " + SessionService.CurrentSession.AlreadySeenCount;
-            RemainingCount = (SessionService.CurrentSession.FolderCount - SessionService.CurrentSession.AlreadySeenCount);
+            AlreadySeenCountLabel.Text = $"Already Seen: {SessionService.CurrentSession.AlreadySeenCount}";
+            RemainingCount = SessionService.CurrentSession.FolderCount - SessionService.CurrentSession.AlreadySeenCount;
             RemaingCountLabel.Text = $"Remaining: {RemainingCount}";
 
             Focus();
         }
         private Image LoadImage(string path)
         {
+            if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                throw new FileNotFoundException("Image not found", path);
+            }
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
-                return Image.FromStream(stream);
+
+                using (var tempImage = Image.FromStream(stream))
+                {
+                    return new Bitmap(tempImage);
+                }
             }
         }
         private void ViewerScreen_Load(object sender, EventArgs e)
@@ -57,6 +67,7 @@ namespace NestPix
 
 
             Pixy = NS.GetNext();
+
             if (Pixy.ImagePath != null)
             {
 
@@ -64,8 +75,8 @@ namespace NestPix
             }
             else
             {
-                MessageBox.Show("All Images done");
-                Close();
+                MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK);
+                Application.Exit();
             }
 
             if (Pixy.Preview != null)
@@ -91,30 +102,29 @@ namespace NestPix
 
         private void HandleNavigation(KeyEventArgs e)
         {
-            if (Pixy is not null && !Pixy.IsHasNext)
-            {
-                Pixy = null;
-            }
+
+
             if (e.KeyCode == Keys.Escape)
             {
-                this.Close();
+                Application.Exit();
             }
 
 
             if (e.KeyCode == Config.Shortcuts[Actions.Next])
             {
 
-                if (Pixy != null)
+                NS.AddToCache(Pixy, Actions.Next);
+                if (!Pixy.IsValid)
                 {
-
-                    NS.AddToCache(Pixy, Actions.Next);
-
-                    Pixy = NS.GetNext();
-                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
-                    RenderLabels();
-
+                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-
+                else
+                {
+                    var pixy = NS.GetNext();
+                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
+                    Pixy = pixy;
+                }
 
 
 
@@ -123,9 +133,19 @@ namespace NestPix
             if (e.KeyCode == Config.Shortcuts[Actions.Previous])
             {
 
-                Pixy = NS.GetPrevious();
-                RemaingCountLabel.Text = $"Remaining: {++RemainingCount}";
-                RenderLabels();
+                var pixy = NS.GetPrevious();
+
+                if (!pixy.IsValid)
+                {
+                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    Pixy = pixy;
+                    RemaingCountLabel.Text = $"Remaining: {++RemainingCount}";
+
+                }
 
 
 
@@ -133,49 +153,51 @@ namespace NestPix
 
             if (e.KeyCode == Config.Shortcuts[Actions.Delete])
             {
-                if (Pixy != null)
+
+                NS.AddToCache(Pixy, Actions.Delete);
+                var pixy = NS.GetNext();
+                if (!pixy.IsValid)
                 {
-                    NS.AddToCache(Pixy, Actions.Delete);
-                    Pixy = NS.GetNext();
-                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
-                    RenderLabels();
-
-                    SaveButton.Enabled = true;
-                    MarkedAsDeletedCount++;
-
-
-
-                }
-            }
-            if (Pixy != null)
-            {
-                if (Pixy.ImagePath != null &&
-
-                    string.IsNullOrEmpty(Pixy.ImagePath) == false && string.IsNullOrWhiteSpace(
-                        Pixy.ImagePath) == false && File.Exists(Pixy.ImagePath) == true
-                    )
-                {
-                    MainImage.Image = LoadImage(Pixy.ImagePath);
-
-                    if (Pixy.Preview != null)
-                    {
-                        OverlyPictureBox.Image = LoadImage(Pixy.Preview);
-                    }
+                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 else
                 {
-                    MessageBox.Show("All Images done");
-                    Close();
+                    Pixy = pixy;
+                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
                 }
+
+
+                SaveButton.Enabled = true;
+                MarkedAsDeletedCount++;
+
+
             }
+
+            if (Pixy.ImagePath is not null
+                && string.IsNullOrEmpty(Pixy.ImagePath) == false
+                && string.IsNullOrWhiteSpace(Pixy.ImagePath) == false
+                && File.Exists(Pixy.ImagePath) == true)
+            {
+                MainImage.Image = LoadImage(Pixy.ImagePath);
+
+                if (Pixy.Preview != null) OverlyPictureBox.Image = LoadImage(Pixy.Preview);
+
+            }
+            RenderLabels();
+
         }
 
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
-
-
             HandleNavigation(e);
+        }
 
+        private void HandleDelete()
+        {
+            _ = NS.DeleteAll();
+            SaveButton.Enabled = false;
+            MarkedAsDeletedCount = 0;
         }
 
         private void MainImage_Click(object sender, EventArgs e)
@@ -185,7 +207,7 @@ namespace NestPix
 
         private void CurrentFileLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (Pixy != null && Pixy.ImagePath is not null)
+            if (Pixy is not null && Pixy.ImagePath is not null)
             {
                 OpenInExplorer(Pixy.ImagePath);
             }
@@ -193,16 +215,29 @@ namespace NestPix
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show($"You're about to delete about {MarkedAsDeletedCount} photos. \n " +
-                   $"It won't be deleted permanently, Photos will be moved to Temp Folder. \n" +
+            var result = MessageBox.Show(
+                   $"You're about to delete about {MarkedAsDeletedCount} photos. \n" +
+                   $"It won't be deleted permanently, Photos will be moved to Deleted Folder. \n" +
                    $"You can recover them later.", "Confirm Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                _ = NS.DeleteAll();
-                SaveButton.Enabled = false;
-                MarkedAsDeletedCount = 0;
-
+                HandleDelete();
             }
+        }
+
+        private void IdleTimer_Tick(object sender, EventArgs e)
+        {
+            TimeSpan idle = IdleHook.GetIdleTime();
+            if (idle.TotalSeconds >= ConfigService.IdleTimeInSeconds && MarkedAsDeletedCount > 0)
+            {
+                HandleDelete();
+                MessageBox.Show(
+                   $"You've been idle for more than {ConfigService.IdleTime} minutes\n" +
+                   $"As a result we auto saved your progress since we don't lose the progress :D"
+                  , "We got your back", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+
         }
     }
 }
