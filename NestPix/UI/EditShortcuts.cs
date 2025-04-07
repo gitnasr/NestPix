@@ -11,8 +11,8 @@ namespace NestPix.UI
         public EditShortcuts()
         {
             InitializeComponent();
-            this.KeyPreview = true; // Enable form to receive keyboard events
-            this.KeyDown += EditShortcuts_KeyDown; // Subscribe to KeyDown event once
+            KeyPreview = true;
+            KeyDown += EditShortcuts_KeyDown;
 
         }
 

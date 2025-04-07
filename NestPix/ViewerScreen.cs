@@ -28,23 +28,18 @@ namespace NestPix
 
             CurrentFileLink.Text = Pixy.ImageName;
             CurrentFolderLabel.Text = Pixy.CurrentDir;
-
-
-
-
         }
 
-        public ViewerScreen(string ParentPath)
+        public ViewerScreen()
         {
             InitializeComponent();
 
-            NS = new NavigationService(ParentPath);
+            NS = new NavigationService();
             MainFolderLabel.Text = SessionService.CurrentSession.Folder;
             AlreadySeenCountLabel.Text = $"Already Seen: {SessionService.CurrentSession.AlreadySeenCount}";
             RemainingCount = SessionService.CurrentSession.FolderCount - SessionService.CurrentSession.AlreadySeenCount;
-            RemaingCountLabel.Text = $"Remaining: {RemainingCount}";
+            RemaingCountLabel.Text = $"Remaining: {RemainingCount.ToString("N0")}";
 
-            Focus();
         }
         private Image LoadImage(string path)
         {
@@ -106,6 +101,8 @@ namespace NestPix
 
             if (e.KeyCode == Keys.Escape)
             {
+                HandleDelete();
+
                 Application.Exit();
             }
 
@@ -114,16 +111,19 @@ namespace NestPix
             {
 
                 NS.AddToCache(Pixy, Actions.Next);
-                if (!Pixy.IsValid)
+
+                var pixy = NS.GetNext();
+                if (pixy.IsValid)
                 {
-                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
+                    Pixy = pixy;
                 }
                 else
                 {
-                    var pixy = NS.GetNext();
-                    RemaingCountLabel.Text = $"Remaining: {--RemainingCount}";
-                    Pixy = pixy;
+                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    HandleDelete();
+                    Application.Exit();
+
                 }
 
 
@@ -134,20 +134,12 @@ namespace NestPix
             {
 
                 var pixy = NS.GetPrevious();
-
-                if (!pixy.IsValid)
-                {
-                    MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else
+                if (pixy.IsValid)
                 {
                     Pixy = pixy;
                     RemaingCountLabel.Text = $"Remaining: {++RemainingCount}";
 
                 }
-
-
 
             }
 
@@ -159,6 +151,7 @@ namespace NestPix
                 if (!pixy.IsValid)
                 {
                     MessageBox.Show("Nothing to more show... ", "End of Images", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    HandleDelete();
                     return;
                 }
                 else
@@ -187,9 +180,17 @@ namespace NestPix
             RenderLabels();
 
         }
-
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Left || keyData == Keys.Right)
+            {
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
         private void ViewerScreen_KeyDown(object sender, KeyEventArgs e)
         {
+
             HandleNavigation(e);
         }
 

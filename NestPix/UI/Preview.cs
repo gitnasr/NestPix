@@ -10,7 +10,7 @@ public class DraggablePictureBox : PictureBox
         this.MouseDown += OnMouseDown;
         this.MouseMove += OnMouseMove;
         this.MouseUp += OnMouseUp;
-        this.Click += onClick;
+        this.DoubleClick += onClick;
     }
 
     private void onClick(object sender, EventArgs args)

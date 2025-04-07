@@ -1,4 +1,5 @@
 ﻿using NestPix.Models;
+using NestPix.Types;
 
 namespace NestPix.Services
 {
@@ -36,6 +37,49 @@ namespace NestPix.Services
             {
                 List<Cache> MarkedAsRemoved = db.Caches.Where(c => c.SessionId == session.id && c.IsDeleted == true).ToList();
                 return MarkedAsRemoved;
+            }
+        }
+
+        public Cache? GetImageFromCacheBySessionId(int sessionId, Pix Image)
+        {
+
+            using (var db = new AppDB())
+            {
+
+                Cache? cached = db.Caches
+                    .FirstOrDefault(c => c.SessionId == sessionId
+                    && c.FileName == Image.ImageName
+                    && c.FolderPath == Image.CurrentDir);
+
+                return cached;
+
+            }
+
+        }
+
+        public void UpdateImageAction(Cache Image, Actions action)
+        {
+            using (var db = new AppDB())
+            {
+
+                switch (action)
+                {
+                    case Actions.Next:
+                        Image.IsSkipped = true;
+                        Image.IsDeleted = false;
+                        break;
+                    case Actions.Delete:
+                        Image.IsDeleted = true;
+                        Image.IsSkipped = false;
+                        break;
+                    default:
+                        break;
+                }
+
+                db.Caches.Update(Image);
+                db.SaveChanges();
+
+
             }
         }
 

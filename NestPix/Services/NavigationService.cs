@@ -6,21 +6,19 @@ namespace NestPix.Services
 
     internal class NavigationService : FilesService
     {
-        private string ParentFolder { get; set; } = string.Empty;
         int CurrentDirIndex = 0;
         int CurrentImageIndex = -1;
-
+        public bool isEndOfList { get; private set; } = false;
         KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
 
         string? PreviewImage = null;
         SessionService sessionService = new SessionService();
 
-        Session? CurrentSession = null;
         CacheService cacheService = new CacheService();
-        public NavigationService(string ParentFolder)
+        public NavigationService()
         {
 
-            this.ParentFolder = ParentFolder;
+
 
         }
         public int GetDirsCount()
@@ -38,7 +36,7 @@ namespace NestPix.Services
             return ImageFiles.ElementAt(index);
         }
 
-        private string FindInDirByIndex(string dir, int index)
+        private string? FindInDirByIndex(string dir, int index)
         {
 
             try
@@ -48,15 +46,8 @@ namespace NestPix.Services
             }
             catch (Exception)
             {
-                if (ImageFiles[dir].Count == 0)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return ImageFiles[dir].ElementAt(0);
+                return null;
 
-                }
             }
 
 
@@ -124,9 +115,11 @@ namespace NestPix.Services
             }
             else
             {
+
                 Dir previousDir = GetPreviousDir();
                 if (previousDir.IsHasNext)
                 {
+
                     CurrentDirIndex -= 1;
                     CurrentDir = previousDir.Next;
                     CurrentImageIndex = CurrentDir.Value.Count - 1;
@@ -138,12 +131,16 @@ namespace NestPix.Services
             }
 
             GetPreview();
-            string ImagePath = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
-            if (PreviewImage is not null)
+            string? ImagePath = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
+            if (PreviewImage is not null && ImagePath is not null)
             {
                 return new Pix(ImagePath, CurrentDir.Key, PreviewImage);
             }
-            return new Pix(ImagePath, CurrentDir.Key);
+            if (ImagePath is not null)
+            {
+                return new Pix(ImagePath, CurrentDir.Key);
+            }
+            return new Pix();
         }
         public Pix GetNext()
         {
@@ -170,6 +167,7 @@ namespace NestPix.Services
 
                 Dir nextDir = GetNextDir();
 
+
                 if (nextDir.IsHasNext)
                 {
                     CurrentDirIndex += 1;
@@ -178,8 +176,7 @@ namespace NestPix.Services
                 }
                 else
                 {
-
-
+                    isEndOfList = true;
                     return new Pix();
                 }
 
@@ -191,16 +188,16 @@ namespace NestPix.Services
 
             GetPreview();
             var CurrentImage = FindInDirByIndex(CurrentDir.Key, CurrentImageIndex);
-            var ImageName = Path.GetFileName(CurrentImage);
-            if (PreviewImage != null)
+            if (PreviewImage is not null && CurrentImage is not null)
             {
                 return new Pix(CurrentImage, CurrentDir.Key, PreviewImage);
 
             }
-
-            return new Pix(CurrentImage, CurrentDir.Key);
-
-
+            if (CurrentImage is not null)
+            {
+                return new Pix(CurrentImage, CurrentDir.Key);
+            }
+            return new Pix();
 
         }
 
@@ -209,8 +206,7 @@ namespace NestPix.Services
         public void AddToCache(Pix pixy, Actions action)
         {
 
-
-            var session = CurrentSession ??= sessionService.GetLastSessionByFolder(ParentFolder);
+            var session = sessionService.GetCurrentSession();
 
             if (pixy.ImagePath is null || pixy.CurrentDir is null)
             {
@@ -218,19 +214,33 @@ namespace NestPix.Services
             }
 
 
-            Cache cache = new Cache()
+            Cache? CachedImage = cacheService.GetImageFromCacheBySessionId(session.id, pixy);
+
+            if (CachedImage == null)
             {
-                FileName = pixy.ImageName,
-                FolderPath = pixy.CurrentDir,
-                FileSize = new FileInfo(pixy.ImagePath).Length,
-                IsDeleted = action == Actions.Delete,
-                IsSkipped = action == Actions.Next,
-                Extension = Path.GetExtension(pixy.ImagePath),
-                CreatedAt = DateTime.Now,
-                SessionId = session.id,
-                ParentFolder = session?.Folder,
-            };
-            cacheService.Add(cache);
+                Cache cache = new Cache()
+                {
+                    FileName = pixy.ImageName,
+                    FolderPath = pixy.CurrentDir,
+                    FileSize = new FileInfo(pixy.ImagePath).Length,
+                    IsDeleted = action == Actions.Delete,
+                    IsSkipped = action == Actions.Next,
+                    Extension = Path.GetExtension(pixy.ImagePath),
+                    CreatedAt = DateTime.Now,
+                    SessionId = session.id,
+                    ParentFolder = session?.Folder,
+                };
+                cacheService.Add(cache);
+            }
+            else
+            {
+                cacheService.UpdateImageAction(CachedImage, action);
+
+            }
+
+
+
+
         }
         public List<Cache> GetMarkedAsDeleted()
         {
@@ -240,10 +250,7 @@ namespace NestPix.Services
         }
         public async Task DeleteAll()
         {
-
-
             List<Cache> ImagesMarkedAsDeleted = GetMarkedAsDeleted();
-
             foreach (var image in ImagesMarkedAsDeleted)
             {
                 string ImagePath = Path.Combine(image.FolderPath, image.FileName);

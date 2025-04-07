@@ -153,7 +153,7 @@
             ClientSize = new Size(1210, 1409);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(MainImage);
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             KeyPreview = true;
             MaximizeBox = false;
             Name = "ViewerScreen";

@@ -10,10 +10,7 @@ namespace NestPix.Models
 
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-        public int UsingCount { get; set; } = 0;
-
         public bool IsActive { get; set; } = true;
 
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

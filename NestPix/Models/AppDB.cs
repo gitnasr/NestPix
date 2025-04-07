@@ -15,7 +15,8 @@ namespace NestPix.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Shortcuts>().HasKey(Shortcut => Shortcut.Id);
-            modelBuilder.Entity<Session>().HasKey(Session => Session.id);
+            modelBuilder.Entity<Session>()
+                .HasMany(s => s.Caches);
             modelBuilder.Entity<Cache>().HasKey(Cache => Cache.Id);
 
             base.OnModelCreating(modelBuilder);

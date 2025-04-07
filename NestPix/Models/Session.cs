@@ -9,7 +9,7 @@
         public string? Folder { get; set; }
         public int FolderCount { get; set; }
         public int AlreadySeenCount { get; set; }
-
+        public List<Cache> Caches { get; set; } = new List<Cache>();
 
     }
 }

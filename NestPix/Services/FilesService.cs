@@ -92,7 +92,6 @@
                     .Count();
 
                 sessionService.CreateSession(FolderPath, CountAlreadySeen, AllDetectedImages.Count);
-                sessionService.SetCurrentSession(sessionService.GetCurrentSession());
             });
         }
     }
