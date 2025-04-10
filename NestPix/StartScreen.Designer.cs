@@ -35,8 +35,8 @@
             menuStrip1 = new MenuStrip();
             toolStripMenuItem1 = new ToolStripMenuItem();
             editKeybindgToolStripMenuItem = new ToolStripMenuItem();
-            StatusLabel = new LinkLabel();
             openDeleteFolderToolStripMenuItem = new ToolStripMenuItem();
+            StatusLabel = new LinkLabel();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -105,6 +105,13 @@
             editKeybindgToolStripMenuItem.Text = "Edit Keybindg";
             editKeybindgToolStripMenuItem.Click += editKeybindgToolStripMenuItem_Click;
             // 
+            // openDeleteFolderToolStripMenuItem
+            // 
+            openDeleteFolderToolStripMenuItem.Name = "openDeleteFolderToolStripMenuItem";
+            openDeleteFolderToolStripMenuItem.Size = new Size(182, 29);
+            openDeleteFolderToolStripMenuItem.Text = "Open &Delete Folder";
+            openDeleteFolderToolStripMenuItem.Click += openDeleteFolderToolStripMenuItem_Click;
+            // 
             // StatusLabel
             // 
             StatusLabel.AutoSize = true;
@@ -114,13 +121,6 @@
             StatusLabel.TabIndex = 6;
             StatusLabel.TabStop = true;
             StatusLabel.Text = "Paste Link to Start ...";
-            // 
-            // openDeleteFolderToolStripMenuItem
-            // 
-            openDeleteFolderToolStripMenuItem.Name = "openDeleteFolderToolStripMenuItem";
-            openDeleteFolderToolStripMenuItem.Size = new Size(182, 29);
-            openDeleteFolderToolStripMenuItem.Text = "Open &Delete Folder";
-            openDeleteFolderToolStripMenuItem.Click += openDeleteFolderToolStripMenuItem_Click;
             // 
             // StartScreen
             // 
@@ -136,7 +136,7 @@
             Name = "StartScreen";
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "NestPix";
+            Text = "NestPix v1.0.0";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);

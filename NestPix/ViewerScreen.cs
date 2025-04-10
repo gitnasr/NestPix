@@ -240,5 +240,23 @@ namespace NestPix
 
 
         }
+
+        private void ViewerScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HandleDelete();
+            Application.Exit();
+
+        }
+
+        private void ViewerScreen_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            HandleDelete();
+            Application.Exit();
+        }
+
+        private void OpenDestroyFolderButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", ConfigService.DeleteFolderPath);
+        }
     }
 }
