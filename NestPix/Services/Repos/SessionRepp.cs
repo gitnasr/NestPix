@@ -1,10 +1,10 @@
 ﻿using NestPix.Models;
 
-namespace NestPix.Services
+namespace NestPix.Services.Repos
 {
-    internal class SessionService
+    internal class SessionRepo
     {
-        public SessionService() { }
+        public SessionRepo() { }
 
         public static Session CurrentSession { get; private set; } = new Session();
         public void CreateSession(string folder, int AlreadySeenCount, int FoldersCount)

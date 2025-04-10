@@ -1,10 +1,12 @@
-﻿namespace NestPix.Services
+﻿using NestPix.Services.Repos;
+
+namespace NestPix.Services
 {
 
     internal class FilesService
     {
-        SessionService sessionService = new SessionService();
-        CacheService cacheService = new CacheService();
+        SessionRepo sessionService = new SessionRepo();
+        CacheRepo cacheService = new CacheRepo();
         private List<string> ImageExtensions = new List<string> {
                 ".jpg", ".jpeg", ".png", ".bmp", ".webp"
             };

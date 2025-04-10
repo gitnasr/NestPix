@@ -137,6 +137,7 @@
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "NestPix v1.0.0";
+            Load += StartScreen_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);

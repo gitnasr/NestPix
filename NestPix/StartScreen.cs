@@ -65,5 +65,10 @@ namespace NestPix
         {
             Process.Start("explorer.exe", ConfigService.DeleteFolderPath);
         }
+
+        private void StartScreen_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

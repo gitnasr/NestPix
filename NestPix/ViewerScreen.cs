@@ -1,5 +1,6 @@
 ﻿using NestPix.Helpers;
 using NestPix.Services;
+using NestPix.Services.Repos;
 using NestPix.Types;
 using System.Diagnostics;
 
@@ -35,9 +36,9 @@ namespace NestPix
             InitializeComponent();
 
             NS = new NavigationService();
-            MainFolderLabel.Text = SessionService.CurrentSession.Folder;
-            AlreadySeenCountLabel.Text = $"Already Seen: {SessionService.CurrentSession.AlreadySeenCount}";
-            RemainingCount = SessionService.CurrentSession.FolderCount - SessionService.CurrentSession.AlreadySeenCount;
+            MainFolderLabel.Text = SessionRepo.CurrentSession.Folder;
+            AlreadySeenCountLabel.Text = $"Already Seen: {SessionRepo.CurrentSession.AlreadySeenCount}";
+            RemainingCount = SessionRepo.CurrentSession.FolderCount - SessionRepo.CurrentSession.AlreadySeenCount;
             RemaingCountLabel.Text = $"Remaining: {RemainingCount.ToString("N0")}";
 
         }

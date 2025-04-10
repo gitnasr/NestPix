@@ -2,9 +2,9 @@
 
 namespace NestPix.Services.DB_Services
 {
-    internal class ShortcutService
+    internal class ShortcutRepo
     {
-        public ShortcutService() { }
+        public ShortcutRepo() { }
 
         public void AddShortcut(string name, Keys key, Actions action)
         {

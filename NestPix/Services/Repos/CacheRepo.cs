@@ -1,11 +1,11 @@
 ﻿using NestPix.Models;
 using NestPix.Types;
 
-namespace NestPix.Services
+namespace NestPix.Services.Repos
 {
-    internal class CacheService
+    internal class CacheRepo
     {
-        public CacheService() { }
+        public CacheRepo() { }
         public void Add(Cache cache)
         {
             // Add a new cache to the database

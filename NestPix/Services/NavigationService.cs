@@ -1,4 +1,5 @@
 ﻿using NestPix.Models;
+using NestPix.Services.Repos;
 using NestPix.Types;
 
 namespace NestPix.Services
@@ -12,9 +13,9 @@ namespace NestPix.Services
         KeyValuePair<string, List<string>> CurrentDir = new KeyValuePair<string, List<string>>();
 
         string? PreviewImage = null;
-        SessionService sessionService = new SessionService();
+        SessionRepo sessionService = new SessionRepo();
 
-        CacheService cacheService = new CacheService();
+        CacheRepo cacheService = new CacheRepo();
         public NavigationService()
         {
 

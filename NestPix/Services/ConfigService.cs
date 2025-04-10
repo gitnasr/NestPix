@@ -42,7 +42,7 @@ namespace NestPix.Services
 
         private void LoadShortcutsFromDatabase()
         {
-            ShortcutService shortcutService = new ShortcutService();
+            ShortcutRepo shortcutService = new ShortcutRepo();
             Shortcuts = shortcutService.GetShortcuts();
         }
 
@@ -62,7 +62,7 @@ namespace NestPix.Services
         }
         public void SaveShortcuts()
         {
-            ShortcutService shortcutService = new ShortcutService();
+            ShortcutRepo shortcutService = new ShortcutRepo();
             foreach (var item in Shortcuts)
             {
                 shortcutService.UpdateShortcut(item.Key.ToString(), item.Value, item.Key);
