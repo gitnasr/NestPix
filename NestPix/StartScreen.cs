@@ -66,8 +66,38 @@ namespace NestPix
             Process.Start("explorer.exe", ConfigService.DeleteFolderPath);
         }
 
-        private void StartScreen_Load(object sender, EventArgs e)
+        private async void StartScreen_LoadAsync(object sender, EventArgs e)
         {
+            try
+            {
+                var update = new UpdateService();
+                await update.CheckForUpdateAsync();
+                var updateAvailable = update.IsUpdateAvailable();
+
+                if (updateAvailable && update.LatestVersionUrl is not null)
+                {
+                    var result = MessageBox.Show("An update is available. ", "Update Available", MessageBoxButtons.OK);
+                    if (result == DialogResult.OK)
+                    {
+                        var update_url = update.DownloadUpdate();
+
+
+                        Process.Start(new ProcessStartInfo(update_url) { UseShellExecute = true });
+
+                    }
+                    Application.Exit();
+
+
+                }
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Error while update check", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+
+            }
+
 
         }
     }
